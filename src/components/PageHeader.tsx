@@ -25,14 +25,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   actions = []
 }) => {
   const renderAction = (action: ActionButton, index: number) => {
-    const baseClasses = "px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors";
+    const baseClasses = "px-3 sm:px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-colors text-sm sm:text-base w-full sm:w-auto";
     const className = action.className || "bg-secondary hover:bg-secondary-dark text-white";
     const finalClasses = `${baseClasses} ${className}`;
 
     const content = (
       <>
-        {action.icon && <action.icon className="w-5 h-5" />}
-        <span>{action.text}</span>
+        {action.icon && <action.icon className="w-4 h-4 sm:w-5 sm:h-5" />}
+        <span className="truncate">{action.text}</span>
       </>
     );
 
@@ -62,20 +62,20 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   };
 
   return (
-    <div className="flex justify-between items-center mb-6">
-      <div>
-        <h1 className="text-2xl font-bold text-primary">
+    <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6">
+      <div className="flex-1">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary break-words">
           {icon && <span className="mr-2">{icon}</span>}
           {title}
         </h1>
         {subtitle && (
-          <p className="text-gray-300 mt-1">
+          <p className="text-gray-300 mt-1 text-sm sm:text-base">
             {subtitle}
           </p>
         )}
       </div>
       {actions.length > 0 && (
-        <div className="flex space-x-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full lg:w-auto">
           {actions.map(renderAction)}
         </div>
       )}

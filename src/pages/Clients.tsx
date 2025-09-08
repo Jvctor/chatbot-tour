@@ -25,7 +25,7 @@ const Clients: React.FC = () => {
             icon: PlusIcon,
             to: '/clients/create',
             testId: 'novo-cliente-btn',
-            className: 'bg-secondary-light hover:bg-secondary text-white'
+            className: 'bg-primary hover:bg-primary-dark text-white'
           }
         ]}
       />

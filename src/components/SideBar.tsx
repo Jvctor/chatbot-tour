@@ -1,6 +1,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
+import { useLocation, Link } from 'react-router-dom'
 
 interface SideBarProps {
   sidebarOpen?: boolean
@@ -8,16 +9,13 @@ interface SideBarProps {
   standalone?: boolean
 }
 
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Clientes', href: '#', current: false },
-  { name: 'Operações', href: '#', current: false },
-  { name: 'Parceiros', href: '#', current: false },
+const navigationItems = [
+  { name: 'Dashboard', href: '/dashboard' },
+  { name: 'Clientes', href: '/clients' },
+  { name: 'Operações', href: '/operacoes' },
+  { name: 'Parceiros', href: '/parceiros' },
 ]
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
 
 export default function SideBar({ 
   sidebarOpen: externalSidebarOpen, 
@@ -25,9 +23,13 @@ export default function SideBar({
   standalone = false 
 }: SideBarProps = {}) {
   const [internalSidebarOpen, setInternalSidebarOpen] = useState(false)
-  
+  const location = useLocation()
   const sidebarOpen = externalSidebarOpen ?? internalSidebarOpen
   const setSidebarOpen = externalSetSidebarOpen ?? setInternalSidebarOpen
+  const navigation = navigationItems.map(item => ({
+    ...item,
+    current: location.pathname === item.href
+  }))
 
   const sidebarContent = (
     <>
@@ -39,7 +41,6 @@ export default function SideBar({
         />
       )}
 
-      {/* Mobile sidebar */}
       <div className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out md:hidden ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       } bg-primary-dark`}>
@@ -58,9 +59,9 @@ export default function SideBar({
         </div>
         <nav className="mt-8 px-2 space-y-1">
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
+              to={item.href}
               onClick={() => setSidebarOpen(false)}
               className={`group flex items-center px-2 py-2 text-base font-medium rounded-md transition-all duration-200 ${
                 item.current 
@@ -69,7 +70,7 @@ export default function SideBar({
               }`}
             >
               {item.name}
-            </a>
+            </Link>
           ))}
         </nav>
         <div className="absolute bottom-0 w-full p-4 border-t border-primary-light">
@@ -99,9 +100,9 @@ export default function SideBar({
           </div>
           <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
             {navigation.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.href}
                 className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
                   item.current 
                     ? 'bg-secondary text-white' 
@@ -109,7 +110,7 @@ export default function SideBar({
                 }`}
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
           </nav>
           
