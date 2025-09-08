@@ -33,24 +33,28 @@ export default function SideBar({
     <>
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 md:hidden"
+          className="fixed inset-0 z-40 md:hidden"
+          style={{ backgroundColor: 'var(--sidebar-overlay-color)' }}
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Mobile sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 transform transition-transform duration-300 ease-in-out md:hidden ${
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out md:hidden ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}>
-        <div className="flex items-center justify-between h-16 px-4 bg-gray-900">
+      }`} style={{ backgroundColor: 'var(--sidebar-color)' }}>
+        <div className="flex items-center justify-between h-16 px-4" style={{ backgroundColor: 'var(--sidebar-header-color)' }}>
           <img
-            alt="Your Company"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+            alt="AgroSystem"
+            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=green&shade=600"
             className="h-8 w-auto"
           />
           <button
             onClick={() => setSidebarOpen(false)}
-            className="text-gray-300 hover:text-white"
+            style={{ color: 'var(--sidebar-text)' }}
+            className="hover:text-white transition-colors"
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--sidebar-text-hover)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--sidebar-text)'}
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -61,18 +65,29 @@ export default function SideBar({
               key={item.name}
               href={item.href}
               onClick={() => setSidebarOpen(false)}
-              className={classNames(
-                item.current 
-                  ? 'bg-gray-900 text-white' 
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                'group flex items-center px-2 py-2 text-base font-medium rounded-md'
-              )}
+              className="group flex items-center px-2 py-2 text-base font-medium rounded-md transition-colors"
+              style={{
+                backgroundColor: item.current ? 'var(--sidebar-active)' : 'transparent',
+                color: item.current ? 'var(--sidebar-text-hover)' : 'var(--sidebar-text)'
+              }}
+              onMouseEnter={(e) => {
+                if (!item.current) {
+                  e.currentTarget.style.backgroundColor = 'var(--sidebar-active)'
+                  e.currentTarget.style.color = 'var(--sidebar-text-hover)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!item.current) {
+                  e.currentTarget.style.backgroundColor = 'transparent'
+                  e.currentTarget.style.color = 'var(--sidebar-text)'
+                }
+              }}
             >
               {item.name}
             </a>
           ))}
         </nav>
-        <div className="absolute bottom-0 w-full p-4 border-t border-gray-700">
+        <div className="absolute bottom-0 w-full p-4" style={{ borderTop: '1px solid var(--border-agro)' }}>
           <div className="flex items-center">
             <img
               alt=""
