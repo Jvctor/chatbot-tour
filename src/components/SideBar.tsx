@@ -42,8 +42,8 @@ export default function SideBar({
       {/* Mobile sidebar */}
       <div className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out md:hidden ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      }`} style={{ backgroundColor: 'var(--bg-sidebar)' }}>
-        <div className="flex items-center justify-between h-16 px-4" style={{ backgroundColor: 'var(--bg-sidebar-header)' }}>
+      } bg-primary-dark`}>
+        <div className="flex items-center justify-between h-16 px-4 bg-primary-darkest">
           <img
             alt="AgroSystem"
             src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=orange&shade=600"
@@ -51,8 +51,7 @@ export default function SideBar({
           />
           <button
             onClick={() => setSidebarOpen(false)}
-            style={{ color: 'var(--text-sidebar)' }}
-            className="hover:opacity-80 transition-opacity"
+            className="text-white hover:opacity-80 transition-opacity"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -63,29 +62,17 @@ export default function SideBar({
               key={item.name}
               href={item.href}
               onClick={() => setSidebarOpen(false)}
-              className="group flex items-center px-2 py-2 text-base font-medium rounded-md transition-all duration-200"
-              style={{
-                backgroundColor: item.current ? 'var(--accent-primary)' : 'transparent',
-                color: item.current ? 'white' : 'var(--text-sidebar)'
-              }}
-              onMouseEnter={(e) => {
-                if (!item.current) {
-                  e.currentTarget.style.backgroundColor = 'var(--accent-primary)'
-                  e.currentTarget.style.color = 'white'
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!item.current) {
-                  e.currentTarget.style.backgroundColor = 'transparent'
-                  e.currentTarget.style.color = 'var(--text-sidebar)'
-                }
-              }}
+              className={`group flex items-center px-2 py-2 text-base font-medium rounded-md transition-all duration-200 ${
+                item.current 
+                  ? 'bg-secondary text-white' 
+                  : 'text-white hover:bg-secondary hover:text-white'
+              }`}
             >
               {item.name}
             </a>
           ))}
         </nav>
-        <div className="absolute bottom-0 w-full p-4" style={{ borderTop: '1px solid var(--border-color)' }}>
+        <div className="absolute bottom-0 w-full p-4 border-t border-primary-light">
           <div className="flex items-center">
             <img
               alt=""
@@ -93,17 +80,17 @@ export default function SideBar({
               className="w-8 h-8 rounded-full"
             />
             <div className="ml-3">
-              <p className="text-sm font-medium" style={{ color: 'var(--text-sidebar)' }}>John Doe</p>
-              <p className="text-xs" style={{ color: 'var(--text-sidebar)', opacity: 0.7 }}>john@example.com</p>
+              <p className="text-sm font-medium text-white">John Doe</p>
+              <p className="text-xs text-white opacity-70">john@example.com</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden md:fixed md:inset-y-0 md:left-0 md:z-50 md:block md:w-64 bg-primary">
+      <div className="hidden md:fixed md:inset-y-0 md:left-0 md:z-50 md:block md:w-64 bg-primary-dark">
         <div className="flex flex-col h-full">
-          <div className="flex items-center h-16 px-4 bg-primary-dark">
+          <div className="flex items-center h-16 px-4 bg-primary-darkest">
             <img
               alt="Your Company"
               src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
@@ -115,12 +102,11 @@ export default function SideBar({
               <a
                 key={item.name}
                 href={item.href}
-                className={classNames(
+                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
                   item.current 
-                    ? 'bg-gray-900 text-white' 
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                  'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
-                )}
+                    ? 'bg-secondary text-white' 
+                    : 'text-gray-300 hover:bg-secondary hover:text-white'
+                }`}
               >
                 {item.name}
               </a>
@@ -128,9 +114,9 @@ export default function SideBar({
           </nav>
           
           {/* User Profile Desktop */}
-          <div className="border-t border-gray-700 p-4">
+          <div className="border-t border-primary-light p-4">
             <Menu as="div" className="relative">
-              <MenuButton className="w-full group flex items-center text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <MenuButton className="w-full group flex items-center text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary">
                 <img
                   alt=""
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -138,7 +124,7 @@ export default function SideBar({
                 />
                 <div className="ml-3 text-left">
                   <p className="text-sm font-medium text-white">John Doe</p>
-                  <p className="text-xs text-gray-400">john@example.com</p>
+                  <p className="text-xs text-gray-300">john@example.com</p>
                 </div>
               </MenuButton>
 
@@ -219,7 +205,7 @@ export default function SideBar({
 
   if (standalone) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-primary-lightest">
         {sidebarContent}
       </div>
     )

@@ -31,7 +31,7 @@ const Clients: React.FC = () => {
         </div>
         <div className="flex space-x-3">
           <button
-            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+            className="bg-secondary hover:bg-secondary-dark text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
           >
             <PlayIcon className="w-5 h-5" />
             <span>Tour: Criar Cliente</span>
@@ -39,7 +39,7 @@ const Clients: React.FC = () => {
           <Link
             to="/clients/create"
             data-testid="novo-cliente-btn"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+            className="bg-secondary-light hover:bg-secondary text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
           >
             <PlusIcon className="w-5 h-5" />
             <span>Novo Cliente</span>
@@ -51,22 +51,22 @@ const Clients: React.FC = () => {
           title="Total de Clientes"
           value={mockClients.length}
           icon={UserIcon}
-          iconBgColor="bg-blue-100"
-          iconColor="text-blue-600"
+          iconBgColor="bg-secondary-lightest"
+          iconColor="text-secondary-dark"
         />
         <StatCard
           title="Agricultura"
           value={mockClients.filter(c => c.type === 'agriculture').length}
           icon={UserIcon}
-          iconBgColor="bg-green-100"
-          iconColor="text-green-600"
+          iconBgColor="bg-primary-lightest"
+          iconColor="text-primary-dark"
         />
         <StatCard
           title="Agronegócio"
           value={mockClients.filter(c => c.type === 'agribusiness').length}
           icon={UserIcon}
-          iconBgColor="bg-purple-100"
-          iconColor="text-purple-600"
+          iconBgColor="bg-secondary"
+          iconColor="text-white"
         />
       </div>
       <div className="bg-white rounded-lg shadow overflow-hidden">
