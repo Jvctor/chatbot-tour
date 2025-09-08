@@ -2,6 +2,12 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 
+interface SideBarProps {
+  sidebarOpen?: boolean
+  setSidebarOpen?: (open: boolean) => void
+  standalone?: boolean
+}
+
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Clientes', href: '#', current: false },
@@ -13,18 +19,27 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function SideBar() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+export default function SideBar({ 
+  sidebarOpen: externalSidebarOpen, 
+  setSidebarOpen: externalSetSidebarOpen, 
+  standalone = false 
+}: SideBarProps = {}) {
+  const [internalSidebarOpen, setInternalSidebarOpen] = useState(false)
+  
+  const sidebarOpen = externalSidebarOpen ?? internalSidebarOpen
+  const setSidebarOpen = externalSetSidebarOpen ?? setInternalSidebarOpen
 
-  return (
-    <div className="min-h-screen bg-gray-50">
+  const sidebarContent = (
+    <>
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 lg:hidden"
+          className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 transform transition-transform duration-300 ease-in-out lg:hidden ${
+
+      {/* Mobile sidebar */}
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 transform transition-transform duration-300 ease-in-out md:hidden ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <div className="flex items-center justify-between h-16 px-4 bg-gray-900">
@@ -71,7 +86,9 @@ export default function SideBar() {
           </div>
         </div>
       </div>
-      <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-64 lg:bg-gray-800">
+
+      {/* Desktop sidebar */}
+      <div className="hidden md:fixed md:inset-y-0 md:left-0 md:z-50 md:block md:w-64 md:bg-gray-800">
         <div className="flex flex-col h-full">
           <div className="flex items-center h-16 px-4 bg-gray-900">
             <img
@@ -145,66 +162,55 @@ export default function SideBar() {
           </div>
         </div>
       </div>
-      <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden">
-        <button
-          type="button"
-          onClick={() => setSidebarOpen(true)}
-          className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
-        >
-          <span className="sr-only">Abrir sidebar</span>
-          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-        </button>
-        <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
-          Dashboard
-        </div>
-        <Menu as="div" className="relative">
-          <MenuButton className="-m-1.5 flex items-center p-1.5">
-            <img
-              alt=""
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              className="h-8 w-8 rounded-full bg-gray-50"
-            />
-          </MenuButton>
-          <MenuItems
-            transition
-            className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+      {!standalone && (
+        <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 md:hidden">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            className="-m-2.5 p-2.5 text-gray-700"
           >
-            <MenuItem>
-              <a href="#" className="block px-3 py-1 text-sm leading-6 text-gray-900 data-focus:bg-gray-50">
-                Perfil
-              </a>
-            </MenuItem>
-            <MenuItem>
-              <a href="#" className="block px-3 py-1 text-sm leading-6 text-gray-900 data-focus:bg-gray-50">
-                Sair
-              </a>
-            </MenuItem>
-          </MenuItems>
-        </Menu>
-      </div>
-      <div className="lg:pl-64">
-        <main className="py-6 sm:py-8 lg:py-10">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="hidden lg:block">
-              <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-                Dashboard
-              </h1>
-            </div>
-            <div className="mt-6 lg:mt-8">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {[1, 2, 3, 4, 5, 6].map((item) => (
-                  <div key={item} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
-                    <h3 className="text-lg font-medium text-gray-900">Card {item}</h3>
-                    <p className="mt-2 text-sm text-gray-600">
-                      Conteúdo do card responsivo que se adapta a diferentes tamanhos de tela.
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <span className="sr-only">Abrir sidebar</span>
+            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+          </button>
+          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
+            Dashboard
           </div>
-        </main>
-      </div>
-    </div>
+          <Menu as="div" className="relative">
+            <MenuButton className="-m-1.5 flex items-center p-1.5">
+              <img
+                alt=""
+                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                className="h-8 w-8 rounded-full bg-gray-50"
+              />
+            </MenuButton>
+            <MenuItems
+              transition
+              className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+            >
+              <MenuItem>
+                <a href="#" className="block px-3 py-1 text-sm leading-6 text-gray-900 data-focus:bg-gray-50">
+                  Perfil
+                </a>
+              </MenuItem>
+              <MenuItem>
+                <a href="#" className="block px-3 py-1 text-sm leading-6 text-gray-900 data-focus:bg-gray-50">
+                  Sair
+                </a>
+              </MenuItem>
+            </MenuItems>
+          </Menu>
+        </div>
+      )}
+    </>
   )
+
+  if (standalone) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {sidebarContent}
+      </div>
+    )
+  }
+
+  return sidebarContent
 }

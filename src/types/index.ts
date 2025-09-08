@@ -30,3 +30,26 @@ export interface Tour {
   context: string[];
   steps: TourStep[];
 }
+export interface Client {
+  id: string;
+  name: string;
+  email: string;
+  type: 'agriculture' | 'agribusiness';
+  document: string;
+  phone: string;
+}
+
+export interface TableColumn {
+  key: string;
+  label: string;
+  render?: (value: any, row: any) => React.ReactNode;
+  className?: string;
+}
+
+export interface TableProps {
+  title: string;
+  columns: TableColumn[];
+  data: any[];
+  keyField?: string;
+  className?: string;
+}
