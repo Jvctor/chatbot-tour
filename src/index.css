@@ -1,5 +1,32 @@
 @import "tailwindcss";
 
+:root {
+  --color-primary-lightest: #35414f;
+  --color-primary-light: #1f2a36;
+  --color-primary-pure: #101820;
+  --color-primary-dark: #0c141a;
+  --color-primary-darkest: #000000;
+
+  --color-secondary-lightest: #ff9c6a;
+  --color-secondary-light: #ff7846;
+  --color-secondary-pure: #fc4c02;
+  --color-secondary-dark: #d63d01;
+  --color-secondary-darkest: #a33400;
+
+  /* Aplicando as cores aos elementos da aplicação */
+  --bg-main: var(--color-primary-lightest);
+  --bg-sidebar: var(--color-primary-pure);
+  --bg-sidebar-header: var(--color-primary-dark);
+  --bg-card: #ffffff;
+  --text-primary: var(--color-primary-darkest);
+  --text-secondary: var(--color-primary-light);
+  --text-sidebar: #ffffff;
+  --text-sidebar-hover: var(--color-secondary-lightest);
+  --accent-primary: var(--color-secondary-pure);
+  --accent-hover: var(--color-secondary-dark);
+  --border-color: var(--color-primary-lightest);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -7,4 +34,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
 }

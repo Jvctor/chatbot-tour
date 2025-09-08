@@ -34,7 +34,7 @@ export default function SideBar({
       {sidebarOpen && (
         <div 
           className="fixed inset-0 z-40 md:hidden"
-          style={{ backgroundColor: 'var(--sidebar-overlay-color)' }}
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -42,19 +42,17 @@ export default function SideBar({
       {/* Mobile sidebar */}
       <div className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out md:hidden ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      }`} style={{ backgroundColor: 'var(--sidebar-color)' }}>
-        <div className="flex items-center justify-between h-16 px-4" style={{ backgroundColor: 'var(--sidebar-header-color)' }}>
+      }`} style={{ backgroundColor: 'var(--bg-sidebar)' }}>
+        <div className="flex items-center justify-between h-16 px-4" style={{ backgroundColor: 'var(--bg-sidebar-header)' }}>
           <img
             alt="AgroSystem"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=green&shade=600"
+            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=orange&shade=600"
             className="h-8 w-auto"
           />
           <button
             onClick={() => setSidebarOpen(false)}
-            style={{ color: 'var(--sidebar-text)' }}
-            className="hover:text-white transition-colors"
-            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--sidebar-text-hover)'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--sidebar-text)'}
+            style={{ color: 'var(--text-sidebar)' }}
+            className="hover:opacity-80 transition-opacity"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -65,21 +63,21 @@ export default function SideBar({
               key={item.name}
               href={item.href}
               onClick={() => setSidebarOpen(false)}
-              className="group flex items-center px-2 py-2 text-base font-medium rounded-md transition-colors"
+              className="group flex items-center px-2 py-2 text-base font-medium rounded-md transition-all duration-200"
               style={{
-                backgroundColor: item.current ? 'var(--sidebar-active)' : 'transparent',
-                color: item.current ? 'var(--sidebar-text-hover)' : 'var(--sidebar-text)'
+                backgroundColor: item.current ? 'var(--accent-primary)' : 'transparent',
+                color: item.current ? 'white' : 'var(--text-sidebar)'
               }}
               onMouseEnter={(e) => {
                 if (!item.current) {
-                  e.currentTarget.style.backgroundColor = 'var(--sidebar-active)'
-                  e.currentTarget.style.color = 'var(--sidebar-text-hover)'
+                  e.currentTarget.style.backgroundColor = 'var(--accent-primary)'
+                  e.currentTarget.style.color = 'white'
                 }
               }}
               onMouseLeave={(e) => {
                 if (!item.current) {
                   e.currentTarget.style.backgroundColor = 'transparent'
-                  e.currentTarget.style.color = 'var(--sidebar-text)'
+                  e.currentTarget.style.color = 'var(--text-sidebar)'
                 }
               }}
             >
@@ -87,7 +85,7 @@ export default function SideBar({
             </a>
           ))}
         </nav>
-        <div className="absolute bottom-0 w-full p-4" style={{ borderTop: '1px solid var(--border-agro)' }}>
+        <div className="absolute bottom-0 w-full p-4" style={{ borderTop: '1px solid var(--border-color)' }}>
           <div className="flex items-center">
             <img
               alt=""
@@ -95,17 +93,17 @@ export default function SideBar({
               className="w-8 h-8 rounded-full"
             />
             <div className="ml-3">
-              <p className="text-sm font-medium text-white">John Doe</p>
-              <p className="text-xs text-gray-400">john@example.com</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--text-sidebar)' }}>John Doe</p>
+              <p className="text-xs" style={{ color: 'var(--text-sidebar)', opacity: 0.7 }}>john@example.com</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden md:fixed md:inset-y-0 md:left-0 md:z-50 md:block md:w-64 md:bg-gray-800">
+      <div className="hidden md:fixed md:inset-y-0 md:left-0 md:z-50 md:block md:w-64 bg-primary">
         <div className="flex flex-col h-full">
-          <div className="flex items-center h-16 px-4 bg-gray-900">
+          <div className="flex items-center h-16 px-4 bg-primary-dark">
             <img
               alt="Your Company"
               src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
@@ -178,11 +176,11 @@ export default function SideBar({
         </div>
       </div>
       {!standalone && (
-        <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 md:hidden">
+        <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-primary-light px-4 py-4 shadow-sm sm:px-6 md:hidden">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
-            className="-m-2.5 p-2.5 text-gray-700"
+            className="-m-2.5 p-2.5 text-white"
           >
             <span className="sr-only">Abrir sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />

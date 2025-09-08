@@ -13,8 +13,8 @@ const Clients: React.FC = () => {
 
   const getClientTypeColor = (type: string) => {
     return type === 'agriculture' 
-      ? 'bg-green-100 text-green-800' 
-      : 'bg-blue-100 text-blue-800';
+      ? 'bg-secondary-lightest text-primary-dark' 
+      : 'bg-primary-lightest text-white';
   };
 
   return (
@@ -22,10 +22,10 @@ const Clients: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-white">
             👥 Clientes
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-300 mt-1">
             Gerencie seus clientes de agricultura e agronegócio
           </p>
         </div>
