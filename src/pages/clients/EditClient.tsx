@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import PageHeader from '../../components/PageHeader';
+import { mockClients } from '../../data/mockData';
 
-const CreateClient: React.FC = () => {
+const EditClient: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const [formData, setFormData] = useState({
     name: '',
     type: 'agriculture' as 'agriculture' | 'agribusiness',
@@ -12,6 +13,25 @@ const CreateClient: React.FC = () => {
     email: '',
     phone: '',
   });
+  const [loading, setLoading] = useState(true);
+  const [clientNotFound, setClientNotFound] = useState(false);
+
+  useEffect(() => {
+    const client = mockClients.find(c => c.id === id);
+    
+    if (client) {
+      setFormData({
+        name: client.name,
+        type: client.type,
+        document: client.document,
+        email: client.email,
+        phone: client.phone,
+      });
+    } else {
+      setClientNotFound(true);
+    }
+    setLoading(false);
+  }, [id]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -23,30 +43,68 @@ const CreateClient: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-        
+    
     setTimeout(() => {
-      alert('Cliente criado com sucesso!');
+      alert('Cliente atualizado com sucesso!');
       navigate('/clients');
     }, 1000);
   };
 
   const isFormValid = formData.name && formData.document && formData.email && formData.phone;
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Carregando...</div>
+      </div>
+    );
+  }
+
+  if (clientNotFound) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="p-6 pb-0">
+          <div className="flex items-center space-x-4 mb-6">
+            <Link
+              to="/clients"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <ArrowLeftIcon className="w-5 h-5 text-gray-600" />
+            </Link>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Cliente não encontrado
+              </h1>
+              <p className="text-gray-600 mt-1">
+                O cliente que você está tentando editar não existe.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6">
-      <PageHeader
-        title="Novo Cliente"
-        subtitle="Preencha os dados para cadastrar um novo cliente"
-        variant="simple"
-        actions={[
-          {
-            type: 'link',
-            icon: ArrowLeftIcon,
-            to: '/clients',
-            text: 'Voltar'
-          }
-        ]}
-      />
+    <div className="min-h-screen bg-gray-50">
+      <div className="p-6 pb-0">
+        <div className="flex items-center space-x-4 mb-6">
+          <Link
+            to="/clients"
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <ArrowLeftIcon className="w-5 h-5 text-gray-600" />
+          </Link>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Editar Cliente
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Atualize os dados do cliente
+            </p>
+          </div>
+        </div>
+      </div>
       <div className="px-6">
         <div className="bg-white rounded-lg shadow p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -86,7 +144,6 @@ const CreateClient: React.FC = () => {
                   <option value="agribusiness">Agronegócio (Empresa)</option>
                 </select>
               </div>
-
               <div>
                 <label htmlFor="document" className="block text-sm font-medium text-gray-700 mb-2">
                   {formData.type === 'agriculture' ? 'CPF *' : 'CNPJ *'}
@@ -104,6 +161,8 @@ const CreateClient: React.FC = () => {
                 />
               </div>
             </div>
+
+            {/* Email e Telefone */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
@@ -120,6 +179,7 @@ const CreateClient: React.FC = () => {
                   required
                 />
               </div>
+
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
                   Telefone *
@@ -136,14 +196,16 @@ const CreateClient: React.FC = () => {
                 />
               </div>
             </div>
+
+            {/* Actions */}
             <div className="flex justify-end pt-6">
               <button
                 type="submit"
                 data-testid="save-client-btn"
                 disabled={!isFormValid}
-                className="bg-primary disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg transition-colors text-sm"
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg transition-colors text-sm"
               >
-                Salvar
+                Atualizar Cliente
               </button>
             </div>
           </form>
@@ -153,4 +215,4 @@ const CreateClient: React.FC = () => {
   );
 };
 
-export default CreateClient;
+export default EditClient;

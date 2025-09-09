@@ -1,5 +1,6 @@
 import React from 'react';
-import { PlusIcon, UserIcon, PlayIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, UserIcon, PlayIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 import { mockClients } from '../../data/mockData';
 import Table from '../../components/Table';
 import StatCard from '../../components/StatCard';
@@ -59,6 +60,19 @@ const Clients: React.FC = () => {
             { key: 'type', label: 'Tipo' },
             { key: 'document', label: 'Documento' },
             { key: 'phone', label: 'Contato' },
+            { 
+              key: 'actions', 
+              label: 'Ações',
+              render: (_, row) => (
+                <Link
+                  to={`/clients/edit/${row.id}`}
+                  className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                >
+                  <PencilIcon className="w-4 h-4 mr-1" />
+                  Editar
+                </Link>
+              )
+            }
           ]}
           data={mockClients}
         />

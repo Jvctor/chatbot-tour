@@ -10,7 +10,6 @@ interface SideBarProps {
 }
 
 const navigationItems = [
-  { name: 'Dashboard', href: '/dashboard' },
   { name: 'Clientes', href: '/clients' },
   { name: 'Operações', href: '/operacoes' },
   { name: 'Parceiros', href: '/parceiros' },
