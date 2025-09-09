@@ -1,11 +1,13 @@
 import React from 'react';
+import { formatCurrency } from '../utils/mask';
 
 interface StatCardProps {
   title: string;
-  value: number;
+  value: number | string;
   icon: React.ComponentType<{ className?: string }>;
   iconBgColor: string;
   iconColor: string;
+  isCurrency?: boolean;
 }
 
 const StatCard: React.FC<StatCardProps> = ({
@@ -14,7 +16,9 @@ const StatCard: React.FC<StatCardProps> = ({
   icon: Icon,
   iconBgColor,
   iconColor,
+  isCurrency = false,
 }) => {
+  const displayValue = isCurrency && typeof value === 'number' ? formatCurrency(value) : value;
   return (
     <div className="bg-white p-6 rounded-lg shadow">
       <div className="flex items-center">
@@ -23,7 +27,7 @@ const StatCard: React.FC<StatCardProps> = ({
         </div>
         <div className="ml-4">
           <p className="text-sm text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+          <p className="text-2xl font-bold text-gray-900">{displayValue}</p>
         </div>
       </div>
     </div>

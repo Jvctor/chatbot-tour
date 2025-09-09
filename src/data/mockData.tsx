@@ -1,4 +1,4 @@
-import type { Client } from "../types";
+import type { Client, OperationData } from "../types";
 
 export const mockClients: Client[] = [
   {
@@ -24,5 +24,35 @@ export const mockClients: Client[] = [
     email: 'maria@email.com',
     phone: '(11) 77777-7777',
     document: '987.654.321-09',
+  }
+];
+
+export const mockOperations: OperationData[] = [
+  {
+    id: '1',
+    clientId: '1',
+    clientName: 'João Silva',
+    type: 'Custeio Agrícola',
+    amount: 50000,
+    status: 'approved',
+    createdAt: new Date('2024-01-20'),
+  },
+  {
+    id: '2',
+    clientId: '2',
+    clientName: 'Fazenda Santa Clara LTDA',
+    type: 'Investimento Rural',
+    amount: 250000,
+    status: 'analyzing',
+    createdAt: new Date('2024-02-15'),
+  },
+  {
+    id: '3',
+    clientId: '3',
+    clientName: 'Maria Oliveira',
+    type: 'Custeio Agrícola',
+    amount: 30000,
+    status: 'sent',
+    createdAt: new Date('2024-03-10'),
   }
 ];

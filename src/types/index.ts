@@ -53,3 +53,13 @@ export interface TableProps {
   keyField?: string;
   className?: string;
 }
+
+export interface OperationData {
+  id: string;
+  clientId: string;
+  clientName: string;
+  type: string;
+  amount: number;
+  status: 'draft' | 'sent' | 'analyzing' | 'approved' | 'rejected';
+  createdAt: Date;
+}

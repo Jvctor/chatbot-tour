@@ -66,8 +66,6 @@ const CreateClient: React.FC = () => {
                 required
               />
             </div>
-
-            {/* Tipo de Cliente e Documento */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2">
@@ -86,7 +84,6 @@ const CreateClient: React.FC = () => {
                   <option value="agribusiness">Agronegócio (Empresa)</option>
                 </select>
               </div>
-
               <div>
                 <label htmlFor="document" className="block text-sm font-medium text-gray-700 mb-2">
                   {formData.type === 'agriculture' ? 'CPF *' : 'CNPJ *'}
