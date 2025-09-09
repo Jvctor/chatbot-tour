@@ -244,17 +244,15 @@ const CreateOperation: React.FC = () => {
           }
         ]}
       />
-
-      {/* Progress */}
-      <div className="max-w-2xl mb-8">
+      <div >
         <div className="flex items-center space-x-4">
           {[1, 2, 3, 4].map((step) => (
             <div key={step} className="flex-1">
               <div className={`h-2 rounded-full ${
-                step <= currentStep ? 'bg-blue-600' : 'bg-gray-200'
+                step <= currentStep ? 'bg-secondary' : 'bg-gray-200'
               }`} />
               <p className={`text-xs mt-1 ${
-                step <= currentStep ? 'text-blue-600' : 'text-gray-400'
+                step <= currentStep ? 'text-secondary' : 'text-gray-400'
               }`}>
                 {step === 1 && 'Cliente'}
                 {step === 2 && 'Tipo'}
@@ -265,14 +263,10 @@ const CreateOperation: React.FC = () => {
           ))}
         </div>
       </div>
-
-      {/* Form */}
-      <div className="max-w-2xl">
+      <div className=" mt-6">
         <div className="bg-white rounded-lg shadow p-6">
           <form onSubmit={handleSubmit}>
             {renderStep()}
-
-            {/* Actions */}
             <div className="flex justify-between pt-6 border-t mt-6">
               <button
                 type="button"
@@ -284,14 +278,6 @@ const CreateOperation: React.FC = () => {
               </button>
 
               <div className="space-x-3">
-                <button
-                  type="button"
-                  onClick={() => navigate('/operations')}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  Cancelar
-                </button>
-
                 {currentStep < 4 ? (
                   <button
                     type="button"
