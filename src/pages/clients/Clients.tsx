@@ -1,9 +1,9 @@
 import React from 'react';
 import { PlusIcon, UserIcon, PlayIcon } from '@heroicons/react/24/outline';
-import { mockClients } from '../data/mockData';
-import Table from '../components/Table';
-import StatCard from '../components/StatCard';
-import PageHeader from '../components/PageHeader';
+import { mockClients } from '../../data/mockData';
+import Table from '../../components/Table';
+import StatCard from '../../components/StatCard';
+import PageHeader from '../../components/PageHeader';
 
 const Clients: React.FC = () => {
   return (
@@ -11,7 +11,6 @@ const Clients: React.FC = () => {
       <PageHeader
         title="Clientes"
         subtitle="Gerencie seus clientes de agricultura e agronegócio"
-        icon="👥"
         actions={[
           {
             type: 'button',
