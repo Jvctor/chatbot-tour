@@ -43,7 +43,7 @@ export const mockOperations: OperationData[] = [
     clientName: 'Fazenda Santa Clara LTDA',
     type: 'Investimento Rural',
     amount: 250000,
-    status: 'analyzing',
+    status: 'approved',
     createdAt: new Date('2024-02-15'),
   },
   {
