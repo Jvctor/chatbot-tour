@@ -17,7 +17,7 @@ const Operations: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 p-6">
+    <div className="p-6">
       <PageHeader
         title="Operações"
         subtitle="Gerencie operações de crédito rural"

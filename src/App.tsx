@@ -4,6 +4,7 @@ import Clients from './pages/clients/Clients'
 import CreateClient from './pages/clients/CreateClient'
 import EditClient from './pages/clients/EditClient'
 import Operacoes from './pages/operations/Operations'
+import CreateOperation from './pages/operations/CreateOperation'
 // import Dashboard from "./pages/Dashboard"
 // import Operacoes from "./pages/Operacoes"
 // import Parceiros from "./pages/Parceiros"
@@ -17,7 +18,9 @@ function App() {
           <Route path="/clients" element={<Clients />} />
           <Route path="/clients/create" element={<CreateClient />} />
           <Route path="/clients/edit/:id" element={<EditClient />} />
-          <Route path="/operacoes" element={<Operacoes />} />
+          <Route path="/operations" element={<Operacoes />} />
+          <Route path="/operations/create" element={<CreateOperation />} />
+
           {/* <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/parceiros" element={<Parceiros />} /> */}
         </Routes>
