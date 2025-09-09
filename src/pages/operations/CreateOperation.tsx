@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { mockClients } from '../../data/mockData';
 import PageHeader from '../../components/PageHeader';
+import StepProgress from '../../components/StepProgress';
 
 const CreateOperation: React.FC = () => {
   const navigate = useNavigate();
@@ -20,6 +21,13 @@ const CreateOperation: React.FC = () => {
     'Crédito Pecuário',
     'Financiamento de Máquinas',
     'Capital de Giro Rural'
+  ];
+
+  const steps = [
+    { id: 1, label: 'Cliente' },
+    { id: 2, label: 'Tipo' },
+    { id: 3, label: 'Dados' },
+    { id: 4, label: 'Confirmar' }
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -244,25 +252,10 @@ const CreateOperation: React.FC = () => {
           }
         ]}
       />
-      <div >
-        <div className="flex items-center space-x-4">
-          {[1, 2, 3, 4].map((step) => (
-            <div key={step} className="flex-1">
-              <div className={`h-2 rounded-full ${
-                step <= currentStep ? 'bg-secondary' : 'bg-gray-200'
-              }`} />
-              <p className={`text-xs mt-1 ${
-                step <= currentStep ? 'text-secondary' : 'text-gray-400'
-              }`}>
-                {step === 1 && 'Cliente'}
-                {step === 2 && 'Tipo'}
-                {step === 3 && 'Dados'}
-                {step === 4 && 'Confirmar'}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
+      <StepProgress 
+        steps={steps} 
+        currentStep={currentStep}
+      />
       <div className=" mt-6">
         <div className="bg-white rounded-lg shadow p-6">
           <form onSubmit={handleSubmit}>
