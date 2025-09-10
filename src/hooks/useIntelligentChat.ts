@@ -12,7 +12,7 @@ export interface UseIntelligentChatReturn {
   clearChat: () => void;
   suggestions: string[];
   needsDisambiguation: boolean;
-  disambiguationOptions: Array<{text: string; action: string}>;
+  disambiguationOptions: Array<{ text: string; action: string }>;
   handleDisambiguation: (action: string) => void;
   sessionStats: {
     currentContext: string;
@@ -29,8 +29,8 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
   const [isProcessing, setIsProcessing] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [needsDisambiguation, setNeedsDisambiguation] = useState(false);
-  const [disambiguationOptions, setDisambiguationOptions] = useState<Array<{text: string; action: string}>>([]);
-  
+  const [disambiguationOptions, setDisambiguationOptions] = useState<Array<{ text: string; action: string }>>([]);
+
   const location = useLocation();
 
   const avatarState = chatProcessor.getAvatarState(isProcessing, isTyping);
@@ -69,7 +69,7 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
 
     try {
       const result = chatProcessor.processMessage(userMessage, location.pathname);
-      
+
       const tourCommand = detectTourCommand(userMessage, location.pathname);
       if (tourCommand && onStartTour) {
         const tourMsg: ChatMessage = {
@@ -84,26 +84,52 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
             relevantHelp: []
           }
         };
-        
         setMessages(prev => [...prev, tourMsg]);
         setIsProcessing(false);
         setIsTyping(false);
-        
-        setTimeout(() => {
-          onStartTour(tourCommand.id);
-        }, 1000);
-        
+
+        // Seletor dinâmico conforme o tour
+        let stepSelector = '';
+        if (tourCommand.id === 'tour-criar-cliente') {
+          stepSelector = '#novo-cliente, [data-tour-step="novo-cliente"]';
+        } else if (tourCommand.id === 'tour-nova-operacao') {
+          stepSelector = '#nova-operacao, [data-tour-step="nova-operacao"]';
+        } else {
+          stepSelector = '[data-tour-step]'; // fallback
+        }
+        console.log('Aguardando elemento do passo 2 do tour:', stepSelector);
+        waitForElement(stepSelector, 7000)
+          .then(() => {
+            console.log('Elemento encontrado, iniciando tour:', tourCommand.id);
+            onStartTour(tourCommand.id);
+          })
+          .catch((err) => {
+            console.warn('Elemento do passo 2 do tour não encontrado:', err);
+            onStartTour(tourCommand.id);
+          });
         return;
+        function waitForElement(selector: string, timeout = 5000): Promise<Element> {
+          return new Promise((resolve, reject) => {
+            const start = Date.now();
+            function check() {
+              const el = document.querySelector(selector);
+              if (el) return resolve(el);
+              if (Date.now() - start > timeout) return reject(new Error('Elemento não encontrado: ' + selector));
+              requestAnimationFrame(check);
+            }
+            check();
+          });
+        }
       }
-      
+
       setIsProcessing(false);
-      
+
       const typingDelay = chatProcessor.calculateTypingDelay(result.response);
-      
+
       setIsTyping(true);
-      
+
       await new Promise(resolve => setTimeout(resolve, typingDelay));
-      
+
       const assistantMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
@@ -119,8 +145,7 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
 
       setMessages(prev => [...prev, assistantMsg]);
       setSuggestions(result.suggestedActions || []);
-      
-      // Gerencia desambiguação
+
       if (result.needsDisambiguation && result.options) {
         setNeedsDisambiguation(true);
         setDisambiguationOptions(result.options);
@@ -131,14 +156,14 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
 
     } catch (error) {
       console.error('Erro no chat:', error);
-      
+
       const errorMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
         content: 'Desculpe, ocorreu um erro. Tente novamente ou digite "ajuda" para orientações.',
         timestamp: new Date()
       };
-      
+
       setMessages(prev => [...prev, errorMsg]);
     } finally {
       setIsTyping(false);
@@ -148,8 +173,7 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
   const handleDisambiguation = useCallback((action: string) => {
     setNeedsDisambiguation(false);
     setDisambiguationOptions([]);
-    
-    // Processa a ação escolhida
+
     sendMessage(action);
   }, [sendMessage]);
 
@@ -184,16 +208,16 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
 
 function detectTourCommand(message: string, pathname: string): { id: string; name: string } | null {
   const normalizedMessage = message.toLowerCase().trim();
-  
+
   const tourPatterns = [
     {
-      patterns: ['como criar um cliente', 'criar cliente', 'tutorial cliente', 'tour cliente', 'guia cliente'],
+      patterns: ['criar cliente', 'tutorial cliente', 'tour cliente', 'guia cliente'],
       id: 'tour-criar-cliente',
       name: 'Como criar um cliente',
       contexts: ['/clients', '/clients/create']
     },
     {
-      patterns: ['como criar operação', 'nova operação', 'tutorial operação', 'tour operação', 'guia operação', 'como preencher formulário'],
+      patterns: ['como criar operação', 'nova operação', 'tutorial operação', 'tour operação', 'guia operação'],
       id: 'tour-nova-operacao',
       name: 'Como criar uma operação',
       contexts: ['/operations', '/operations/create']
@@ -205,17 +229,17 @@ function detectTourCommand(message: string, pathname: string): { id: string; nam
       contexts: ['/clients', '/operations', '/clients/create', '/operations/create']
     }
   ];
-  
+
   for (const tour of tourPatterns) {
     const hasPattern = tour.patterns.some(pattern => normalizedMessage.includes(pattern));
-    
+
     const isValidContext = tour.contexts.some(context => pathname.startsWith(context));
-    
+
     if (hasPattern && isValidContext) {
       return { id: tour.id, name: tour.name };
     }
   }
-  
+
   return null;
 }
 
@@ -227,7 +251,7 @@ function getPageType(pathname: string): 'clients' | 'operations' | 'dashboard' {
 
 function getWelcomeMessageForPage(pathname: string): ChatMessage {
   const pageType = getPageType(pathname);
-  
+
   const welcomeMessages = {
     clients: {
       content: 'Olá! Estou aqui para te ajudar com clientes!\n\nPosso te ajudar com:\n• Como criar um cliente?\n• Diferença entre tipos de cliente\n• Tour completo de criação\n\nDigite sua dúvida ou escolha uma das sugestões!',
@@ -244,7 +268,7 @@ function getWelcomeMessageForPage(pathname: string): ChatMessage {
   };
 
   const pageConfig = welcomeMessages[pageType];
-  
+
   return {
     id: '1',
     type: 'assistant',
@@ -261,7 +285,7 @@ function getWelcomeMessageForPage(pathname: string): ChatMessage {
 
 function getPageSpecificSuggestions(pathname: string): string[] {
   const pageType = getPageType(pathname);
-  
+
   const suggestionMap = {
     '/clients': ['Como criar um cliente?', 'Diferença entre tipos?', 'Tour completo'],
     '/operations': ['Como preencher formulário?', 'Status das operações', 'Tour completo'],
@@ -301,7 +325,7 @@ function getRelevantHelp(pathname: string): string[] {
     '/operations': [
       'Como solicitar crédito?',
       'Status das operações'
-     ],
+    ],
   };
 
   return helpMap[pathname] || [

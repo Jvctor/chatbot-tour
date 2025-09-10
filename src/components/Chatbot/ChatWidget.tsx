@@ -35,9 +35,7 @@ const ChatWidget: React.FC = () => {
           whileTap={{ scale: 0.95 }}
         >
           <ChatBubbleLeftEllipsisIcon className="h-6 w-6" />
-          
-          {/* Indicador de mensagens */}
-          {chatHook.sessionStats.messageCount > 0 && (
+            {chatHook.sessionStats.messageCount > 0 && (
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -46,8 +44,6 @@ const ChatWidget: React.FC = () => {
               {chatHook.sessionStats.messageCount > 9 ? '9+' : chatHook.sessionStats.messageCount}
             </motion.div>
           )}
-
-          {/* Indicador de contexto */}
           <div className="absolute -bottom-1 -left-1 w-3 h-3 rounded-full border-2 border-white"
                style={{ 
                  backgroundColor: 

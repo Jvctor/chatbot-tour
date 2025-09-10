@@ -5,8 +5,8 @@ import CreateClient from './pages/clients/CreateClient'
 import EditClient from './pages/clients/EditClient'
 import Operacoes from './pages/operations/Operations'
 import CreateOperation from './pages/operations/CreateOperation'
-import ChatWidget from './components/chatbot/ChatWidget'
 import TourProvider from './components/tour/TourProvider'
+import ChatWidget from './components/chatbot/ChatWidget'
 
 function App() {
   return (
