@@ -41,6 +41,22 @@ export const tours: Tour[] = [
       },
       {
         id: 'step-5',
+        selector: '[data-testid="client-email-input"]',
+        title: 'Email',
+        description: 'Digite o email do cliente',
+        position: 'bottom',
+        action: 'input',
+      },
+       {
+        id: 'step-6',
+        selector: '[data-testid="client-phone-input"]',
+        title: 'Telefone',
+        description: 'Digite o telefone do cliente',
+        position: 'bottom',
+        action: 'input',
+      },
+      {
+        id: 'step-7',
         selector: '[data-testid="save-client-btn"]',
         title: 'Salvar Cliente',
         description: 'Clique em "Salvar" para finalizar o cadastro',
