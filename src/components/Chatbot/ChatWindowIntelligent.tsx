@@ -195,14 +195,12 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
         {/* Context indicator */}
         <div className="mt-2 text-xs text-gray-500 flex items-center justify-between">
           <span>
-            🎯 Contexto: {sessionStats.currentContext} 
             {sessionStats.lastConfidence > 0 && (
               <span className="ml-1">
                 ({Math.round(sessionStats.lastConfidence * 100)}% confiança)
               </span>
             )}
           </span>
-          <span>💡 Enter para enviar</span>
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ export class IntelligentChatProcessor {
   };
 
   /**
-   * 🧠 Processa a mensagem do usuário de forma inteligente
+   * Processa a mensagem do usuário de forma inteligente
    */
   public processMessage(
     userMessage: string, 
@@ -281,7 +281,7 @@ export class IntelligentChatProcessor {
   }
 
   /**
-   * 🎯 Gera ações sugeridas baseadas no contexto
+   * Gera ações sugeridas baseadas no contexto
    */
   private getSuggestedActions(context: string, intent: string): string[] {
     const contextData = this.getContextData(context);
@@ -306,12 +306,9 @@ export class IntelligentChatProcessor {
     return actionMap[intent] || [];
   }
 
-  /**
-   * 🛟 Fallback contextual
-   */
   private getContextualFallback(context: string): string {
     const fallbacks: Record<string, string> = {
-      'clients': '👤 **Área de Clientes** - Posso te ajudar com:\n• Criar novo cliente\n• Tipos de cliente\n• Gerenciar cadastros\n\n*O que você gostaria de fazer?*',
+      'clients': '👤 **Área de Clientes** - Posso te ajudar com:\n• Criar novo cliente\n• Tipos de cliente\n\nO que você gostaria de fazer?',
       'operations': '💼 **Área de Operações** - Estou aqui para:\n• Criar nova operação\n• Acompanhar status\n• Explicar processo\n\n*Como posso ajudar?*',
       'global': knowledgeBase.global.responses.fallback
     };
@@ -319,9 +316,6 @@ export class IntelligentChatProcessor {
     return fallbacks[context] || fallbacks.global;
   }
 
-  /**
-   * 💾 Atualiza contexto da sessão
-   */
   private updateSessionContext(message: string, currentRoute: string): void {
     this.sessionContext.currentPage = currentRoute;
     
