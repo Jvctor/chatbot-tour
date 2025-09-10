@@ -33,10 +33,8 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
   
   const location = useLocation();
 
-  // Estado do avatar baseado no estado atual
   const avatarState = chatProcessor.getAvatarState(isProcessing, isTyping);
 
-  // Mensagem de boas-vindas inicial com comportamento específico por página
   useEffect(() => {
     if (messages.length === 0) {
       const welcomeMessage = getWelcomeMessageForPage(location.pathname);
@@ -45,13 +43,11 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
     }
   }, [location.pathname, messages.length]);
 
-  // Atualiza sugestões quando muda de página
   useEffect(() => {
     setSuggestions(getPageSpecificSuggestions(location.pathname));
   }, [location.pathname]);
 
   const sendMessage = useCallback(async (userMessage: string) => {
-    // Adiciona mensagem do usuário
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
       type: 'user',
@@ -68,18 +64,14 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
     setMessages(prev => [...prev, userMsg]);
     setIsProcessing(true);
 
-    // Simula delay de processamento (300-800ms)
     const processingDelay = 300 + Math.random() * 500;
     await new Promise(resolve => setTimeout(resolve, processingDelay));
 
     try {
-      // Processa mensagem com IA
       const result = chatProcessor.processMessage(userMessage, location.pathname);
       
-      // Verifica se é um comando para iniciar tour
       const tourCommand = detectTourCommand(userMessage, location.pathname);
       if (tourCommand && onStartTour) {
-        // Adiciona resposta indicando que o tour vai iniciar
         const tourMsg: ChatMessage = {
           id: (Date.now() + 1).toString(),
           type: 'assistant',
@@ -97,7 +89,6 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
         setIsProcessing(false);
         setIsTyping(false);
         
-        // Inicia o tour após um pequeno delay
         setTimeout(() => {
           onStartTour(tourCommand.id);
         }, 1000);
@@ -107,15 +98,12 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
       
       setIsProcessing(false);
       
-      // Calcula delay realista para typing baseado no tamanho da resposta
       const typingDelay = chatProcessor.calculateTypingDelay(result.response);
       
       setIsTyping(true);
       
-      // Delay realista baseado no tamanho da resposta
       await new Promise(resolve => setTimeout(resolve, typingDelay));
       
-      // Cria resposta do assistente
       const assistantMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
@@ -194,27 +182,22 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
   };
 };
 
-// Função para detectar comandos de tour
 function detectTourCommand(message: string, pathname: string): { id: string; name: string } | null {
   const normalizedMessage = message.toLowerCase().trim();
   
-  // Padrões de comandos de tour
   const tourPatterns = [
-    // Tour de criar cliente
     {
       patterns: ['como criar um cliente', 'criar cliente', 'tutorial cliente', 'tour cliente', 'guia cliente'],
       id: 'tour-criar-cliente',
       name: 'Como criar um cliente',
       contexts: ['/clients', '/clients/create']
     },
-    // Tour de nova operação
     {
       patterns: ['como criar operação', 'nova operação', 'tutorial operação', 'tour operação', 'guia operação', 'como preencher formulário'],
       id: 'tour-nova-operacao',
       name: 'Como criar uma operação',
       contexts: ['/operations', '/operations/create']
     },
-    // Tours genéricos
     {
       patterns: ['tour completo', 'guia completo', 'tutorial completo', 'passo a passo'],
       id: pathname.includes('/clients') ? 'tour-criar-cliente' : 'tour-nova-operacao',
@@ -224,10 +207,8 @@ function detectTourCommand(message: string, pathname: string): { id: string; nam
   ];
   
   for (const tour of tourPatterns) {
-    // Verifica se a mensagem contém algum padrão
     const hasPattern = tour.patterns.some(pattern => normalizedMessage.includes(pattern));
     
-    // Verifica se está no contexto correto
     const isValidContext = tour.contexts.some(context => pathname.startsWith(context));
     
     if (hasPattern && isValidContext) {
@@ -238,7 +219,6 @@ function detectTourCommand(message: string, pathname: string): { id: string; nam
   return null;
 }
 
-// Funções auxiliares para contexto específico por página
 function getPageType(pathname: string): 'clients' | 'operations' | 'dashboard' {
   if (pathname.includes('/clients')) return 'clients';
   if (pathname.includes('/operations')) return 'operations';
