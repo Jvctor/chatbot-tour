@@ -69,10 +69,52 @@ export interface KnowledgeBaseItem {
   responses: Record<string, string>;
   tours: string[];
   quickActions: string[];
+  synonyms?: Record<string, string[]>;
+}
+
+export interface ContextualResponse {
+  question: string;
+  contexts: Record<string, string>;
+  options?: Array<{
+    text: string;
+    action: string;
+    context?: string;
+  }>;
+}
+
+export interface IntentPattern {
+  intent: string;
+  keywords: string[];
+  confidence: number;
+  context?: string;
+}
+
+export interface ContextualLogic {
+  pageContext: Record<string, string>;
+  ambiguousKeywords: Record<string, ContextualResponse>;
+  routePatterns: Record<string, string[]>;
+}
+
+export interface SessionContext {
+  currentPage: string;
+  conversationHistory: ChatMessage[];
+  userIntent?: string;
+  lastAction?: string;
+  confidence?: number;
 }
 
 export interface KnowledgeBase {
   global: KnowledgeBaseItem;
   clients: KnowledgeBaseItem;
   operations: KnowledgeBaseItem;
+  contextualLogic: ContextualLogic;
+  intentMatching: {
+    patterns: IntentPattern[];
+    confidenceThreshold: number;
+  };
+  sessionManagement: {
+    rememberContext: boolean;
+    maxHistorySize: number;
+    contextWeights: Record<string, number>;
+  };
 }

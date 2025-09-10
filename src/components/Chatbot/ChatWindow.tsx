@@ -3,31 +3,43 @@ import { motion } from 'framer-motion';
 import { PaperAirplaneIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useTourStore } from '../../stores/tourStore';
 import { useChatStore } from '../../stores/chatStore';
+import { UseIntelligentChatReturn } from '../../hooks/useIntelligentChat';
 import MessageBubble from './MessageBubble';
 
-const loadChatDependencies = async () => {
-  const [
-    { matchKeywords, getQuickActions },
-    { tours }
-  ] = await Promise.all([
-    import('../../utils/contextMatcher'),
-    import('../../data/tours')
-  ]);
-  
-  return { matchKeywords, getQuickActions, tours };
-};
+interface ChatWindowProps {
+  chatHook?: UseIntelligentChatReturn;
+}
 
-const ChatWindow: React.FC = () => {
+const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
   const [inputValue, setInputValue] = useState('');
-  const [quickActions, setQuickActions] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   
-  const { 
-    messages, 
-    isTyping, 
-    currentContext, 
-    addMessage, 
+  const { toggleChat } = useChatStore();
+  const { startTour } = useTourStore();
+
+  // Se temos o hook inteligente, usamos ele, senão usamos o antigo
+  const {
+    messages,
+    isTyping,
+    sendMessage,
+    clearChat,
+    suggestions,
+    needsDisambiguation,
+    disambiguationOptions,
+    handleDisambiguation,
+    sessionStats
+  } = chatHook || {
+    messages: [],
+    isTyping: false,
+    sendMessage: async () => {},
+    clearChat: () => {},
+    suggestions: [],
+    needsDisambiguation: false,
+    disambiguationOptions: [],
+    handleDisambiguation: () => {},
+    sessionStats: { currentContext: 'global', messageCount: 0, lastConfidence: 0, currentPage: '/' }
+  }; 
     setTyping,
     clearMessages,
     toggleChat 
