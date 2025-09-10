@@ -1,3 +1,4 @@
+import { useChatStore } from '../stores/chatStore';
 import { useState, useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { chatProcessor } from '../utils/intelligentChatProcessor';
@@ -47,6 +48,7 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
     setSuggestions(getPageSpecificSuggestions(location.pathname));
   }, [location.pathname]);
 
+  const { isOpen, toggleChat } = useChatStore();
   const sendMessage = useCallback(async (userMessage: string) => {
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
@@ -88,24 +90,25 @@ export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseI
         setIsProcessing(false);
         setIsTyping(false);
 
-        // Seletor dinâmico conforme o tour
         let stepSelector = '';
         if (tourCommand.id === 'tour-criar-cliente') {
           stepSelector = '#novo-cliente, [data-tour-step="novo-cliente"]';
         } else if (tourCommand.id === 'tour-nova-operacao') {
           stepSelector = '#nova-operacao, [data-tour-step="nova-operacao"]';
         } else {
-          stepSelector = '[data-tour-step]'; // fallback
+          stepSelector = '[data-tour-step]';
         }
         console.log('Aguardando elemento do passo 2 do tour:', stepSelector);
         waitForElement(stepSelector, 7000)
           .then(() => {
             console.log('Elemento encontrado, iniciando tour:', tourCommand.id);
             onStartTour(tourCommand.id);
+            if (isOpen) toggleChat();
           })
           .catch((err) => {
             console.warn('Elemento do passo 2 do tour não encontrado:', err);
             onStartTour(tourCommand.id);
+            if (isOpen) toggleChat();
           });
         return;
         function waitForElement(selector: string, timeout = 5000): Promise<Element> {
