@@ -90,7 +90,6 @@ const TourOverlay: React.FC = () => {
     if (step.action === 'click' && highlightedElement) {
       try {
         (highlightedElement as HTMLElement).click();
-        // Aguarda o elemento do próximo passo aparecer antes de avançar
         const nextStepObj = activeTour?.steps[currentStep + 1];
         if (nextStepObj && nextStepObj.selector) {
           await waitForNextStepElement(nextStepObj.selector);
@@ -103,7 +102,6 @@ const TourOverlay: React.FC = () => {
         nextStep();
       }
     } else if (step.action === 'navigate') {
-      // Aguarda o elemento do próximo passo aparecer antes de avançar
       const nextStepObj = activeTour?.steps[currentStep + 1];
       if (nextStepObj && nextStepObj.selector) {
         await waitForNextStepElement(nextStepObj.selector);
