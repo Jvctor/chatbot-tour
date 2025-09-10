@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useTourStore } from '../../stores/tourStore';
+import { useChatStore } from '../../stores/chatStore';
 import TourOverlay from './TourOverlay';
 
 interface TourContextType {
@@ -23,13 +24,15 @@ interface TourProviderProps {
 
 const TourProvider: React.FC<TourProviderProps> = ({ children }) => {
   const { isActive, activeTour, startTour: startStoreTour, endTour } = useTourStore();
-  
+  const toggleChat = useChatStore((state) => state.isOpen ? state.toggleChat : undefined);
+
   const startTour = async (tourId: string) => {
     try {
-      // Lazy loading dos tours
+      // Lazy loading
       const { tours } = await import('../../data/tours');
       const tour = tours.find(t => t.id === tourId);
       if (tour) {
+        if (toggleChat) toggleChat();
         startStoreTour(tour);
       } else {
         console.warn(`Tour com ID ${tourId} não encontrado`);
