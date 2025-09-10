@@ -234,8 +234,8 @@ function getWelcomeMessageForPage(pathname: string): ChatMessage {
       suggestions: ['Como criar um cliente?', 'Diferença entre tipos?', 'Campos obrigatórios']
     },
     operations: {
-      content: 'Olá! Estou aqui para te ajudar com operações!\n\nPosso te ajudar com:\n• Como preencher formulário?\n• Status das operações\n• Modalidades disponíveis\n• Tour completo do processo\n\nDigite sua dúvida ou escolha uma das sugestões!',
-      suggestions: ['Como preencher formulário?', 'Status das operações', 'Modalidades disponíveis']
+      content: 'Olá! Estou aqui para te ajudar com operações!\n\nPosso te ajudar com:\n• Como preencher formulário?\n• Status das operações\n\n• Tour completo do processo\n\nDigite sua dúvida ou escolha uma das sugestões!',
+      suggestions: ['Como preencher formulário?', 'Status das operações']
     },
     dashboard: {
       content: 'Olá! Sou seu assistente virtual!\n\nPosso te ajudar com:\n• Navegação no sistema\n• Criação de clientes\n• Gestão de operações\n• Tours guiados\n\nDigite sua dúvida ou escolha uma das sugestões!',
@@ -264,23 +264,19 @@ function getPageSpecificSuggestions(pathname: string): string[] {
   
   const suggestionMap = {
     '/clients': ['Como criar um cliente?', 'Diferença entre tipos?', 'Campos obrigatórios'],
-    '/clients/create': ['Escolher tipo de cliente', 'Validar dados', 'Tour passo a passo'],
     '/clients/edit': ['Quais campos posso editar?', 'Como salvar alterações', 'Cancelar edição'],
     
     '/operations': ['Como preencher formulário?', 'Status das operações', 'Modalidades disponíveis'],
-    '/operations/create': ['Selecionar cliente', 'Definir valor', 'Escolher modalidade'],
     '/operations/edit': ['Como alterar dados?', 'Reenviar operação', 'Cancelar operação'],
     
     '/': ['Tour do sistema', 'Criar cliente', 'Nova operação'],
     '/dashboard': ['Visão geral', 'Próximos passos', 'Estatísticas']
   };
 
-  // Busca sugestões específicas da rota exata primeiro
   if (suggestionMap[pathname as keyof typeof suggestionMap]) {
     return suggestionMap[pathname as keyof typeof suggestionMap];
   }
 
-  // Fallback para sugestões gerais do tipo de página
   const fallbackSuggestions = {
     clients: ['Como criar um cliente?', 'Diferença entre tipos?', 'Tour completo'],
     operations: ['Como preencher formulário?', 'Status das operações', 'Tour completo'],
@@ -293,9 +289,7 @@ function getPageSpecificSuggestions(pathname: string): string[] {
 function getAvailableActions(pathname: string): string[] {
   const actionMap: Record<string, string[]> = {
     '/clients': ['Criar Cliente', 'Ver Lista', 'Editar Cliente', 'Tour Guiado'],
-    '/clients/create': ['Preencher Formulário', 'Escolher Tipo', 'Validar Dados', 'Cancelar'],
     '/operations': ['Nova Operação', 'Acompanhar Status', 'Histórico', 'Relatórios'],
-    '/operations/create': ['Selecionar Cliente', 'Definir Valor', 'Escolher Modalidade', 'Enviar']
   };
 
   return actionMap[pathname] || ['Navegar', 'Ajuda', 'Tour'];
@@ -306,24 +300,11 @@ function getRelevantHelp(pathname: string): string[] {
     '/clients': [
       'Como criar um cliente?',
       'Diferença entre tipos de cliente',
-      'Como editar cliente existente'
-    ],
-    '/clients/create': [
-      'Escolhendo o tipo correto',
-      'Preenchendo dados obrigatórios', 
-      'Validação de documentos',
-      'Salvando o cliente'
     ],
     '/operations': [
       'Como solicitar crédito?',
       'Status das operações'
      ],
-    '/operations/create': [
-      'Selecionando cliente existente',
-      'Definindo tipo de operação',
-      'Calculando valores',
-      'Enviando para análise'
-    ]
   };
 
   return helpMap[pathname] || [

@@ -51,7 +51,6 @@ export const knowledgeBase: KnowledgeBase = {
   'formulario': 'Dados necessários:\n1. Selecionar cliente\n2. Tipo de operação\n3. Valor solicitado\n4. Observações',
   'credito': 'Modalidades de Crédito Rural:\n- Custeio agrícola\n- Investimento\n- Comercialização\n- Industrialização',
   'analise': 'Processo de Análise:\nApós envio → Em Análise → Você recebe atualizações por email → Decisão final',
-  'modalidades disponíveis': 'Modalidades de Crédito Disponíveis:\n\nCUSTEIO AGRÍCOLA\n- Financiamento da safra\n- Compra de insumos\n- Mão de obra\n\nINVESTIMENTO\n- Máquinas e equipamentos\n- Construções rurais\n- Melhoramento da propriedade\n\nCOMERCIALIZAÇÃO\n- Estocagem da produção\n- Beneficiamento\n- Transporte\n\nINDUSTRIALIZAÇÃO\n- Processamento agrícola\n- Agregação de valor\n\nQual modalidade te interessa?',
   'acompanhar análise': 'Como Acompanhar a Análise:\n\nEmail: Notificações automáticas\nSistema: Status em tempo real\nDashboard: Visão geral das operações\nPrazo: Até 5 dias úteis\n\nVocê será notificado de qualquer mudança!'
     },
     tours: ['tour-nova-operacao', 'tour-acompanhar-operacoes'],
