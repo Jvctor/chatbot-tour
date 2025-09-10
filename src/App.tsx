@@ -5,10 +5,7 @@ import CreateClient from './pages/clients/CreateClient'
 import EditClient from './pages/clients/EditClient'
 import Operacoes from './pages/operations/Operations'
 import CreateOperation from './pages/operations/CreateOperation'
-import ChatWidget from './components/Chatbot/ChatWidget'
-// import Dashboard from "./pages/Dashboard"
-// import Operacoes from "./pages/Operacoes"
-// import Parceiros from "./pages/Parceiros"
+import ChatWidget from './components/chatbot/ChatWidget'
 
 function App() {
   return (

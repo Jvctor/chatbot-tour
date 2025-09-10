@@ -24,7 +24,18 @@ const ChatWidget: React.FC = () => {
             <ChatWindow />
           </motion.div>
         )}
-      </AnimatePresence>   
+      </AnimatePresence>
+      
+      {!isOpen && (
+        <motion.button
+          onClick={toggleChat}
+          className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 shadow-lg transition-colors duration-200"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <ChatBubbleLeftEllipsisIcon className="h-6 w-6" />
+        </motion.button>
+      )}
     </div>
   );
 };
