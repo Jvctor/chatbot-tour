@@ -82,13 +82,16 @@ export class IntelligentChatProcessor {
         }
       }
 
-      // Bonus por contexto correto
+      // BONUS MAIOR por contexto correto da página atual
       if (pattern.context && pattern.context === currentContext) {
-        confidence += 0.2;
+        confidence += 0.3; // Aumentado de 0.2 para 0.3
       }
 
-      // Verifica sinônimos
+      // Verifica sinônimos com peso maior para contexto atual
       confidence += this.checkSynonyms(normalizedMessage, currentContext);
+
+      // BONUS para perguntas específicas da página atual
+      confidence += this.checkPageSpecificQuestions(normalizedMessage, currentContext);
 
       if (confidence > bestMatch.confidence) {
         bestMatch = {
@@ -246,6 +249,35 @@ export class IntelligentChatProcessor {
       }
     }
     return Math.min(score, 0.3);
+  }
+
+  /**
+   * 🎯 Verifica perguntas específicas da página atual
+   */
+  private checkPageSpecificQuestions(message: string, context: string): number {
+    const contextData = this.getContextData(context);
+    if (!contextData?.responses) return 0;
+
+    let score = 0;
+    
+    // Verifica se a mensagem corresponde a perguntas específicas do contexto
+    for (const [questionKey] of Object.entries(contextData.responses)) {
+      // Perguntas específicas têm prioridade maior
+      if (questionKey.length > 5 && message.includes(questionKey)) {
+        score += 0.4; // Bonus alto para perguntas específicas
+      }
+    }
+
+    // Bonus adicional para quickActions específicas da página
+    if (contextData.quickActions) {
+      for (const action of contextData.quickActions) {
+        if (message.toLowerCase().includes(action.toLowerCase())) {
+          score += 0.3;
+        }
+      }
+    }
+
+    return Math.min(score, 0.5);
   }
 
   /**

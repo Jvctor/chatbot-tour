@@ -3,11 +3,11 @@ import { motion } from 'framer-motion';
 import { PaperAirplaneIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useTourStore } from '../../stores/tourStore';
 import { useChatStore } from '../../stores/chatStore';
-import { UseIntelligentChatReturn } from '../../hooks/useIntelligentChat';
+import type { UseIntelligentChatReturn } from '../../hooks/useIntelligentChat';
 import MessageBubble from './MessageBubble';
 
 interface ChatWindowProps {
-  chatHook?: UseIntelligentChatReturn;
+  chatHook: UseIntelligentChatReturn;
 }
 
 const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
@@ -18,7 +18,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
   const { toggleChat } = useChatStore();
   const { startTour } = useTourStore();
 
-  // Se temos o hook inteligente, usamos ele, senão usamos o antigo
+  // Usando apenas a implementação inteligente
   const {
     messages,
     isTyping,
@@ -29,23 +29,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
     disambiguationOptions,
     handleDisambiguation,
     sessionStats
-  } = chatHook || {
-    messages: [],
-    isTyping: false,
-    sendMessage: async () => {},
-    clearChat: () => {},
-    suggestions: [],
-    needsDisambiguation: false,
-    disambiguationOptions: [],
-    handleDisambiguation: () => {},
-    sessionStats: { currentContext: 'global', messageCount: 0, lastConfidence: 0, currentPage: '/' }
-  }; 
-    setTyping,
-    clearMessages,
-    toggleChat 
-  } = useChatStore();
-  
-  const { startTour } = useTourStore();
+  } = chatHook;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -59,128 +43,34 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
     inputRef.current?.focus();
   }, []);
 
-  // Carrega as ações rápidas quando o contexto muda
-  useEffect(() => {
-    const loadQuickActions = async () => {
-      try {
-        const { getQuickActions } = await loadChatDependencies();
-        setQuickActions(getQuickActions(currentContext));
-      } catch (error) {
-        console.error('Erro ao carregar ações rápidas:', error);
-        setQuickActions([]);
-      }
-    };
-
-    loadQuickActions();
-  }, [currentContext]);
-
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
     const userMessage = inputValue.trim();
     setInputValue('');
 
-    // Adiciona mensagem do usuário
-    addMessage({
-      type: 'user',
-      content: userMessage,
-      context: currentContext || undefined,
-    });
-
-    // Simula typing
-    setTyping(true);
-
-    try {
-      // Lazy load das dependências do chat
-      const { matchKeywords, tours } = await loadChatDependencies();
-
-      // Simula delay para resposta
-      setTimeout(() => {
-        setTyping(false);
-        
-        // Verifica se é um comando de tour
-        if (userMessage.toLowerCase().includes('tour') && 
-            userMessage.toLowerCase().includes('cliente')) {
-          const clientTour = tours.find(t => t.id === 'tour-criar-cliente');
-          if (clientTour) {
-            startTour(clientTour);
-            addMessage({
-              type: 'assistant',
-              content: '🎯 Perfeito! Vou te guiar pelo processo de criação de cliente. O tour começará agora!',
-            });
-            return;
-          }
-        }
-
-        if (userMessage.toLowerCase().includes('tour') && 
-            userMessage.toLowerCase().includes('operação')) {
-          const operationTour = tours.find(t => t.id === 'tour-nova-operacao');
-          if (operationTour) {
-            startTour(operationTour);
-            addMessage({
-              type: 'assistant',
-              content: '🎯 Ótimo! Vou te guiar pelo processo de criação de operação. Vamos começar o tour!',
-            });
-            return;
-          }
-        }
-
-        // Gera resposta contextual
-        const response = matchKeywords(userMessage, currentContext);
-        
-        addMessage({
-          type: 'assistant',
-          content: response,
-        });
-      }, 800 + Math.random() * 1000);
-    } catch (error) {
-      setTyping(false);
-      addMessage({
-        type: 'assistant',
-        content: 'Desculpe, ocorreu um erro ao processar sua mensagem. Tente novamente.',
-      });
-    }
+    // Usa o hook inteligente
+    await sendMessage(userMessage);
   };
 
   const handleQuickAction = async (action: string) => {
-    try {
-      const { tours } = await loadChatDependencies();
-      
-      if (action === 'Tutorial completo' && currentContext?.pageType === 'clients') {
-        const clientTour = tours.find(t => t.id === 'tour-criar-cliente');
-        if (clientTour) {
-          startTour(clientTour);
-          addMessage({
-            type: 'assistant',
-            content: '🎯 Iniciando tour completo de criação de cliente!',
-          });
-          return;
-        }
-      }
-      
-      if (action === 'Nova operação' && currentContext?.pageType === 'operations') {
-        const operationTour = tours.find(t => t.id === 'tour-nova-operacao');
-        if (operationTour) {
-          startTour(operationTour);
-          addMessage({
-            type: 'assistant',
-            content: '🎯 Iniciando tour de nova operação!',
-          });
-          return;
-        }
-      }
-      
-      // Ação padrão - enviar como mensagem
-      setInputValue(action);
-      setTimeout(() => handleSendMessage(), 100);
-    } catch (error) {
-      console.error('Erro ao executar ação rápida:', error);
+    setInputValue(action);
+    setTimeout(async () => {
+      await sendMessage(action);
+    }, 100);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
     }
   };
 
   return (
-    <div className="w-85 h-110 bg-white rounded-lg shadow-xl border overflow-hidden flex flex-col">
-      <div className="bg-primary from-blue-600 to-purple-600 p-4 text-white">
+    <div className="w-96 h-96 bg-white rounded-lg shadow-xl border overflow-hidden flex flex-col">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 text-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
@@ -188,17 +78,33 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
             </div>
             <div>
               <h3 className="font-semibold">Assistente Virtual</h3>
-              <p className="text-xs opacity-90">
-                {currentContext?.pageType === 'clients' && 'Seção: Clientes'}
-                {currentContext?.pageType === 'operations' && 'Seção: Operações'}
-                {/* {currentContext?.pageType === 'dashboard' && 'Página Inicial'} */}
+              <p className="text-xs opacity-90 flex items-center space-x-2">
+                <span>
+                  {sessionStats.currentContext === 'clients' && 'Seção: Clientes'}
+                  {sessionStats.currentContext === 'operations' && 'Seção: Operações'}
+                  {sessionStats.currentContext === 'global' && 'Página Inicial'}
+                </span>
+                
+                {/* Indicador de contexto */}
+                <span className={`w-2 h-2 rounded-full ${
+                  sessionStats.currentContext === 'clients' ? 'bg-green-400' :
+                  sessionStats.currentContext === 'operations' ? 'bg-blue-400' :
+                  'bg-gray-400'
+                }`} />
+                
+                {/* Contador de mensagens */}
+                {sessionStats.messageCount > 0 && (
+                  <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                    {sessionStats.messageCount}
+                  </span>
+                )}
               </p>
             </div>
           </div>
           
           <div className="flex items-center space-x-1">
             <button
-              onClick={clearMessages}
+              onClick={clearChat}
               className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
               title="Limpar histórico"
             >
@@ -216,11 +122,35 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
         </div>
       </div>
 
+      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((message) => (
           <MessageBubble key={message.id} message={message} />
         ))}
         
+        {/* Opções de Desambiguação */}
+        {needsDisambiguation && disambiguationOptions.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-blue-50 border border-blue-200 rounded-lg p-3"
+          >
+            <p className="text-sm text-blue-700 mb-2">Escolha uma opção:</p>
+            <div className="space-y-1">
+              {disambiguationOptions.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleDisambiguation(option.action)}
+                  className="block w-full text-left text-sm bg-white hover:bg-blue-50 border border-blue-200 rounded px-3 py-2 transition-colors"
+                >
+                  {option.text}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+        
+        {/* Typing indicator */}
         {isTyping && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -240,17 +170,17 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Quick Actions */}
-      {quickActions.length > 0 && (
+      {/* Sugestões Contextuais */}
+      {suggestions.length > 0 && !needsDisambiguation && (
         <div className="px-4 py-2 border-t bg-gray-50">
           <div className="flex flex-wrap gap-1">
-            {quickActions.slice(0, 3).map((action, index) => (
+            {suggestions.slice(0, 3).map((suggestion, index) => (
               <button
                 key={index}
-                onClick={() => handleQuickAction(action)}
+                onClick={() => handleQuickAction(suggestion)}
                 className="text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded transition-colors"
               >
-                {action}
+                {suggestion}
               </button>
             ))}
           </div>
@@ -265,9 +195,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            placeholder="Digite sua mensagem..."
+            onKeyPress={handleKeyPress}
+            placeholder={`Digite sua mensagem... (Contexto: ${sessionStats.currentContext})`}
             className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={isTyping}
           />
           <button
             onClick={handleSendMessage}
@@ -277,6 +208,13 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
             <PaperAirplaneIcon className="w-4 h-4" />
           </button>
         </div>
+        
+        {/* Indicador de confiança da última resposta */}
+        {sessionStats.lastConfidence > 0 && (
+          <div className="mt-2 text-xs text-gray-500">
+            Confiança: {Math.round(sessionStats.lastConfidence * 100)}%
+          </div>
+        )}
       </div>
     </div>
   );

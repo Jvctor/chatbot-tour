@@ -29,25 +29,19 @@ export const useIntelligentChat = (): UseIntelligentChatReturn => {
   
   const location = useLocation();
 
-  // Mensagem de boas-vindas inicial
+  // Mensagem de boas-vindas inicial com comportamento específico por página
   useEffect(() => {
     if (messages.length === 0) {
-      const welcomeMessage: ChatMessage = {
-        id: '1',
-        type: 'assistant',
-        content: '👋 Olá! Sou seu assistente virtual. Como posso te ajudar hoje?',
-        timestamp: new Date(),
-        context: {
-          route: location.pathname,
-          pageType: getPageType(location.pathname),
-          availableActions: getAvailableActions(location.pathname),
-          relevantHelp: getRelevantHelp(location.pathname)
-        }
-      };
+      const welcomeMessage = getWelcomeMessageForPage(location.pathname);
       setMessages([welcomeMessage]);
-      setSuggestions(getInitialSuggestions(location.pathname));
+      setSuggestions(getPageSpecificSuggestions(location.pathname));
     }
   }, [location.pathname, messages.length]);
+
+  // Atualiza sugestões quando muda de página
+  useEffect(() => {
+    setSuggestions(getPageSpecificSuggestions(location.pathname));
+  }, [location.pathname]);
 
   const sendMessage = useCallback(async (userMessage: string) => {
     // Adiciona mensagem do usuário
@@ -150,11 +144,76 @@ export const useIntelligentChat = (): UseIntelligentChatReturn => {
   };
 };
 
-// Funções auxiliares para contexto
+// Funções auxiliares para contexto específico por página
 function getPageType(pathname: string): 'clients' | 'operations' | 'dashboard' {
   if (pathname.includes('/clients')) return 'clients';
   if (pathname.includes('/operations')) return 'operations';
   return 'dashboard';
+}
+
+function getWelcomeMessageForPage(pathname: string): ChatMessage {
+  const pageType = getPageType(pathname);
+  
+  const welcomeMessages = {
+    clients: {
+      content: '👋 Olá! Estou aqui para te ajudar com **clientes**!\n\n🎯 **Posso te ajudar com:**\n• Como criar um cliente?\n• Diferença entre tipos de cliente\n• Campos obrigatórios\n• Tour completo de criação\n\n💬 **Digite sua dúvida ou escolha uma das sugestões!**',
+      suggestions: ['Como criar um cliente?', 'Diferença entre tipos?', 'Campos obrigatórios']
+    },
+    operations: {
+      content: '👋 Olá! Estou aqui para te ajudar com **operações**!\n\n🎯 **Posso te ajudar com:**\n• Como preencher formulário?\n• Status das operações\n• Modalidades disponíveis\n• Tour completo do processo\n\n💬 **Digite sua dúvida ou escolha uma das sugestões!**',
+      suggestions: ['Como preencher formulário?', 'Status das operações', 'Modalidades disponíveis']
+    },
+    dashboard: {
+      content: '👋 Olá! Sou seu assistente virtual!\n\n🎯 **Posso te ajudar com:**\n• Navegação no sistema\n• Criação de clientes\n• Gestão de operações\n• Tours guiados\n\n💬 **O que você gostaria de fazer?**',
+      suggestions: ['Tour do sistema', 'Criar cliente', 'Nova operação']
+    }
+  };
+
+  const pageConfig = welcomeMessages[pageType];
+  
+  return {
+    id: '1',
+    type: 'assistant',
+    content: pageConfig.content,
+    timestamp: new Date(),
+    context: {
+      route: pathname,
+      pageType: pageType,
+      availableActions: getAvailableActions(pathname),
+      relevantHelp: getRelevantHelp(pathname)
+    }
+  };
+}
+
+function getPageSpecificSuggestions(pathname: string): string[] {
+  const pageType = getPageType(pathname);
+  
+  const suggestionMap = {
+    '/clients': ['Como criar um cliente?', 'Diferença entre tipos?', 'Campos obrigatórios'],
+    '/clients/create': ['Escolher tipo de cliente', 'Validar dados', 'Tour passo a passo'],
+    '/clients/edit': ['Quais campos posso editar?', 'Como salvar alterações', 'Cancelar edição'],
+    
+    '/operations': ['Como preencher formulário?', 'Status das operações', 'Modalidades disponíveis'],
+    '/operations/create': ['Selecionar cliente', 'Definir valor', 'Escolher modalidade'],
+    '/operations/edit': ['Como alterar dados?', 'Reenviar operação', 'Cancelar operação'],
+    
+    '/': ['Tour do sistema', 'Criar cliente', 'Nova operação'],
+    '/dashboard': ['Visão geral', 'Próximos passos', 'Estatísticas']
+  };
+
+  // Busca sugestões específicas da rota exata primeiro
+  if (suggestionMap[pathname as keyof typeof suggestionMap]) {
+    return suggestionMap[pathname as keyof typeof suggestionMap];
+  }
+
+  // Fallback para sugestões gerais do tipo de página
+  const fallbackSuggestions = {
+    clients: ['Como criar um cliente?', 'Diferença entre tipos?', 'Tour completo'],
+    operations: ['Como preencher formulário?', 'Status das operações', 'Tour completo'],
+    dashboard: ['Tour do sistema', 'Funcionalidades', 'Ajuda geral']
+  };
+
+  return fallbackSuggestions[pageType];
 }
 
 function getAvailableActions(pathname: string): string[] {
@@ -173,14 +232,23 @@ function getRelevantHelp(pathname: string): string[] {
     '/clients': [
       'Como criar um cliente?',
       'Diferença entre tipos de cliente',
-      'Campos obrigatórios',
       'Como editar cliente existente'
+    ],
+    '/clients/create': [
+      'Escolhendo o tipo correto',
+      'Preenchendo dados obrigatórios', 
+      'Validação de documentos',
+      'Salvando o cliente'
     ],
     '/operations': [
       'Como solicitar crédito?',
-      'Status das operações',
-      'Modalidades disponíveis',
-      'Acompanhar análise'
+      'Status das operações'
+     ],
+    '/operations/create': [
+      'Selecionando cliente existente',
+      'Definindo tipo de operação',
+      'Calculando valores',
+      'Enviando para análise'
     ]
   };
 
@@ -189,14 +257,4 @@ function getRelevantHelp(pathname: string): string[] {
     'Funcionalidades disponíveis',
     'Tours guiados'
   ];
-}
-
-function getInitialSuggestions(pathname: string): string[] {
-  const suggestionMap: Record<string, string[]> = {
-    '/clients': ['Criar novo cliente', 'Tipos de cliente'],
-    '/operations': ['Nova operação', 'Acompanhar status', 'Modalidades de crédito'],
-    '/': ['Tour do sistema', 'Começar criando cliente', 'Ver operações']
-  };
-
-  return suggestionMap[pathname] || ['Como posso ajudar?', 'Ver tours disponíveis', 'Funcionalidades'];
 }
