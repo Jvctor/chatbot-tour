@@ -8,7 +8,6 @@ export interface ProcessedMessage {
   context?: string;
 }
 
-// Sinônimos e variações para melhor compreensão
 const synonyms: Record<string, string[]> = {
   'criar': ['fazer', 'adicionar', 'cadastrar', 'registrar', 'inserir', 'novo'],
   'cliente': ['pessoa', 'usuário', 'contato', 'perfil'],
@@ -21,7 +20,6 @@ const synonyms: Record<string, string[]> = {
   'quando': ['em que momento', 'que horas', 'que dia']
 };
 
-// Padrões de intenção mais sofisticados
 const intentPatterns: Record<string, RegExp[]> = {
   'greeting': [
     /^(oi|olá|hello|boa tarde|bom dia|boa noite)/i,
@@ -69,7 +67,6 @@ const intentPatterns: Record<string, RegExp[]> = {
   ]
 };
 
-// Extração de entidades simples
 const entityPatterns: Record<string, RegExp> = {
   'client_type': /(agricultura|agronegócio|empresarial|pessoa física)/i,
   'operation_status': /(rascunho|enviado|análise|aprovado|rejeitado)/i,
@@ -78,7 +75,6 @@ const entityPatterns: Record<string, RegExp> = {
   'email': /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g
 };
 
-// Normaliza sinônimos
 function normalizeSynonyms(text: string): string {
   let normalized = text.toLowerCase();
   
@@ -92,14 +88,12 @@ function normalizeSynonyms(text: string): string {
   return normalized;
 }
 
-// Detecta intenção da mensagem
 function detectIntent(text: string): { intent: string; confidence: number } {
   const normalizedText = normalizeSynonyms(text);
   
   for (const [intent, patterns] of Object.entries(intentPatterns)) {
     for (const pattern of patterns) {
       if (pattern.test(normalizedText)) {
-        // Calcula confiança baseada na especificidade do padrão
         const confidence = 0.7 + (pattern.source.length / 100);
         return { intent, confidence: Math.min(confidence, 0.95) };
       }
@@ -109,7 +103,6 @@ function detectIntent(text: string): { intent: string; confidence: number } {
   return { intent: 'unknown', confidence: 0.1 };
 }
 
-// Extrai entidades da mensagem
 function extractEntities(text: string): string[] {
   const entities: string[] = [];
   
@@ -123,7 +116,6 @@ function extractEntities(text: string): string[] {
   return entities;
 }
 
-// Análise de sentimento simples
 function analyzeSentiment(text: string): 'positive' | 'negative' | 'neutral' {
   const positiveWords = [
     'bom', 'ótimo', 'excelente', 'perfeito', 'legal', 'bacana', 
@@ -150,7 +142,6 @@ function analyzeSentiment(text: string): 'positive' | 'negative' | 'neutral' {
   return 'neutral';
 }
 
-// Função principal de processamento
 export function processMessage(
   message: string, 
   context?: PageContext | null
@@ -168,14 +159,13 @@ export function processMessage(
   };
 }
 
-// Gera variações de resposta para evitar repetição
 export function generateResponseVariation(baseResponse: string, variation: number = 0): string {
   const variations: Record<string, string[]> = {
     'greeting': [
-      'Olá! 👋 Como posso te ajudar hoje?',
-      'Oi! 😊 Em que posso ser útil?',
-      'Hey! 👋 Estou aqui para te ajudar!',
-      'Olá! Pronto para te auxiliar! 🚀'
+      'Olá! Como posso te ajudar hoje?',
+      'Oi! Em que posso ser útil?',
+      'Hey! Estou aqui para te ajudar!',
+      'Olá! Pronto para te auxiliar!'
     ],
     'help_offer': [
       'Posso te ajudar com isso!',
@@ -184,14 +174,13 @@ export function generateResponseVariation(baseResponse: string, variation: numbe
       'Perfeito! Deixa comigo.'
     ],
     'tour_intro': [
-      'Vou te guiar passo a passo! 🎯',
-      'Que tal um tour guiado? 🗺️',
-      'Vamos fazer isso juntos! 👥',
-      'Te ensino de forma prática! 💡'
+      'Vou te guiar passo a passo!',
+      'Que tal um tour guiado?',
+      'Vamos fazer isso juntos!',
+      'Te ensino de forma prática!'
     ]
   };
   
-  // Identifica o tipo de resposta base
   for (const [type, options] of Object.entries(variations)) {
     if (baseResponse.includes('Olá') && type === 'greeting') {
       return options[variation % options.length];

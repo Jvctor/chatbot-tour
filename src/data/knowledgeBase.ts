@@ -4,10 +4,10 @@ export const knowledgeBase: KnowledgeBase = {
   global: {
     keywords: ['oi', 'olá', 'hello', 'help', 'ajuda', 'tour', 'guia', 'menu', 'início'],
     responses: {
-      'saudacao': 'Olá! 👋 Sou seu assistente virtual. Como posso te ajudar hoje?',
+  'saudacao': 'Olá! Sou seu assistente virtual. Como posso te ajudar hoje?',
       'ajuda': 'Posso te ajudar com navegação, criação de clientes, operações e muito mais! Que tal começar um tour?',
       'tour': 'Tenho vários tours disponíveis! Posso te guiar por "Criar Cliente" ou "Nova Operação". O que prefere?',
-      'fallback': 'Hmm, não tenho certeza do que você quer fazer. Baseado na página atual, posso te ajudar com:\n\n🎯 Ações sugeridas:\n• Digite "criar" para ver opções de criação\n• Digite "ajuda" para orientações gerais\n• Digite "tour" para tours guiados'
+  'fallback': 'Hmm, não tenho certeza do que você quer fazer. Baseado na página atual, posso te ajudar com:\n\nAções sugeridas:\n• Digite "criar" para ver opções de criação\n• Digite "ajuda" para orientações gerais\n• Digite "tour" para tours guiados'
     },
     tours: ['tour-geral'],
     quickActions: ['Ver tours disponíveis', 'Ajuda geral', 'Começar do início'],
@@ -21,18 +21,18 @@ export const knowledgeBase: KnowledgeBase = {
   clients: {
     keywords: ['cliente', 'clientes', 'agricultor', 'produtor', 'tipo cliente', 'agricultura', 'agronegócio', 'novo cliente', 'cadastro cliente'],
     responses: {
-      'criar': '🎯 **Criar Cliente** - Perfeito! Para criar um cliente:\n\n1️⃣ Clique no botão "Novo Cliente"\n2️⃣ Escolha o tipo (Agricultura ou Agronegócio)\n3️⃣ Preencha os dados obrigatórios\n\n💡 **Quer que eu te guie passo a passo? Digite "tour cliente"!**',
-      'como criar um cliente': '📋 **Processo de Criação de Cliente:**\n\n🔹 **Passo 1:** Clique em "Novo Cliente"\n🔹 **Passo 2:** Selecione o tipo:\n   • 🌱 Agricultura (pessoa física)\n   • 🏭 Agronegócio (empresa)\n🔹 **Passo 3:** Preencha os campos obrigatórios\n🔹 **Passo 4:** Valide e salve\n\n🚀 **Quer iniciar um tour completo? Digite "tour cliente"!**',
-      'diferença entre tipos': '🔍 **Diferença entre Tipos de Cliente:**\n\n🌱 **AGRICULTURA**\n• Pessoa física (CPF)\n• Pequenos produtores rurais\n• Propriedades menores\n• Crédito rural simplificado\n\n🏭 **AGRONEGÓCIO**\n• Pessoa jurídica (CNPJ)\n• Grandes produtores\n• Empresas do setor\n• Operações de maior volume\n\n💡 **Precisa de mais detalhes sobre algum tipo?**',
-      'tipo': '📋 **Tipos de Cliente:**\n\n🌱 **Agricultura** - Pessoa física, pequenos produtores\n🏭 **Agronegócio** - Empresas, grandes produtores\n\n*Qual tipo você precisa cadastrar?*',
-      'formulario': '📝 **Campos do Formulário:**\n• Nome completo ✅\n• Tipo de cliente ✅\n• Documento (CPF/CNPJ) ✅\n• Email ✅\n• Telefone ✅',
-      'agricultura': '🌱 **Tipo Agricultura** é para pessoas físicas e pequenos produtores rurais.',
-      'agronegocio': '🏭 **Tipo Agronegócio** é para empresas e grandes produtores do setor.',
-      'como editar cliente': '✏️ **Editar Cliente:**\n\n1️⃣ Vá para a lista de clientes\n2️⃣ Clique no ícone de edição\n3️⃣ Modifique os campos necessários\n4️⃣ Salve as alterações\n\n⚠️ **Atenção:** Tipo de cliente não pode ser alterado após criação.',
-      'campos obrigatórios': '📋 **Campos Obrigatórios:**\n\n✅ **Nome:** Nome completo ou razão social\n✅ **Tipo:** Agricultura ou Agronegócio\n✅ **Documento:** CPF (11 dígitos) ou CNPJ (14 dígitos)\n✅ **Email:** Endereço válido para contato\n✅ **Telefone:** Número com DDD\n\n💡 **Todos os campos são necessários para prosseguir!**'
+  'criar': 'Criar Cliente - Perfeito! Para criar um cliente:\n\n1. Clique no botão "Novo Cliente"\n2. Escolha o tipo (Agricultura ou Agronegócio)\n3. Preencha os dados obrigatórios\n\nQuer que eu te guie passo a passo? Digite "tour cliente"!',
+  'como criar um cliente': 'Processo de Criação de Cliente:\n\n- Passo 1: Clique em "Novo Cliente"\n- Passo 2: Selecione o tipo:\n   • Agricultura (pessoa física)\n   • Agronegócio (empresa)\n- Passo 3: Preencha os campos obrigatórios\n- Passo 4: Valide e salve\n\nQuer iniciar um tour completo? Digite "tour cliente"!',
+  'diferença entre tipos': 'Diferença entre Tipos de Cliente:**\n\n**AGRICULTURA**\n• Pessoa física (CPF)\n• Pequenos produtores rurais\n• Propriedades menores\n• Crédito rural simplificado\n\n**AGRONEGÓCIO**\n• Pessoa jurídica (CNPJ)\n• Grandes produtores\n• Empresas do setor\n• Operações de maior volume\n\nPrecisa de mais detalhes sobre algum tipo?',
+  'tipo': 'Tipos de Cliente:\n\nAgricultura - Pessoa física, pequenos produtores\n**Agronegócio** - Empresas, grandes produtores\n\n*Qual tipo você precisa cadastrar?*',
+  'formulario': 'Campos do Formulário:\n• Nome completo\n• Tipo de cliente\n• Documento (CPF/CNPJ)\n• Email\n• Telefone',
+  'agricultura': 'Tipo Agricultura é para pessoas físicas e pequenos produtores rurais.',
+  'agronegocio': 'Tipo Agronegócio é para empresas e grandes produtores do setor.',
+  'como editar cliente': 'Editar Cliente:\n\n1. Vá para a lista de clientes\n2. Clique no ícone de edição\n3. Modifique os campos necessários\n4. Salve as alterações\n\nAtenção: Tipo de cliente não pode ser alterado após criação.',
+  'campos obrigatórios': 'Campos Obrigatórios:\n\nNome: Nome completo ou razão social\n**Tipo:** Agricultura ou Agronegócio\n**Documento:** CPF (11 dígitos) ou CNPJ (14 dígitos)\n**Email:** Endereço válido para contato\n**Telefone:** Número com DDD\n\nTodos os campos são necessários para prosseguir!'
     },
     tours: ['tour-criar-cliente', 'tour-gerenciar-clientes'],
-    quickActions: ['Como criar um cliente?', 'Diferença entre tipos?', 'Campos obrigatórios', 'Tour completo'],
+    quickActions: ['Como criar um cliente?', 'Diferença entre tipos?', 'Tour completo'],
     synonyms: {
       'criar': ['novo', 'cadastrar', 'adicionar', 'registrar'],
       'tipo': ['categoria', 'modalidade', 'perfil', 'classificação'],
@@ -44,18 +44,18 @@ export const knowledgeBase: KnowledgeBase = {
   operations: {
     keywords: ['operação', 'operações', 'nova operação', 'processo', 'crédito', 'status', 'análise', 'formulário operação'],
     responses: {
-      'criar': '💼 **Nova Operação** - Excelente escolha!\n\n📋 **Processo em 4 etapas:**\n1️⃣ Tipo de Cliente\n2️⃣ Dados do Cliente\n3️⃣ Dados da Operação\n4️⃣ Confirmação\n\n🚀 **Quer um tour guiado? Digite "tour operação"!**',
-      'como preencher formulário': '📝 **Como Preencher o Formulário de Operação:**\n\n🔹 **Etapa 1:** Selecione o cliente existente\n🔹 **Etapa 2:** Escolha o tipo de operação\n🔹 **Etapa 3:** Defina o valor solicitado\n🔹 **Etapa 4:** Adicione observações (opcional)\n🔹 **Etapa 5:** Revise e envie\n\n💡 **Precisa de ajuda com alguma etapa específica? Digite "tour operação" para um guia completo!**',
-      'status das operações': '📊 **Status das Operações:**\n\n📝 **RASCUNHO** - Operação não enviada\n📤 **ENVIADO** - Aguardando análise\n🔍 **EM ANÁLISE** - Sendo avaliada\n✅ **APROVADO** - Crédito liberado\n❌ **REJEITADO** - Não aprovado\n\n🔄 **Você pode acompanhar em tempo real!**',
-      'status': '📊 **Status das Operações:**\n\n📝 Rascunho\n📤 Enviado\n🔍 Em Análise\n✅ Aprovado\n❌ Rejeitado',
-      'formulario': '📋 **Dados necessários:**\n1. Selecionar cliente\n2. Tipo de operação\n3. Valor solicitado\n4. Observações',
-      'credito': '💰 **Modalidades de Crédito Rural:**\n• Custeio agrícola\n• Investimento\n• Comercialização\n• Industrialização',
-      'analise': '🔍 **Processo de Análise:**\nApós envio → Em Análise → Você recebe atualizações por email → Decisão final',
-      'modalidades disponíveis': '💰 **Modalidades de Crédito Disponíveis:**\n\n🌾 **CUSTEIO AGRÍCOLA**\n• Financiamento da safra\n• Compra de insumos\n• Mão de obra\n\n🏗️ **INVESTIMENTO**\n• Máquinas e equipamentos\n• Construções rurais\n• Melhoramento da propriedade\n\n📦 **COMERCIALIZAÇÃO**\n• Estocagem da produção\n• Beneficiamento\n• Transporte\n\n🏭 **INDUSTRIALIZAÇÃO**\n• Processamento agrícola\n• Agregação de valor\n\n💡 **Qual modalidade te interessa?**',
-      'acompanhar análise': '👀 **Como Acompanhar a Análise:**\n\n📧 **Email:** Notificações automáticas\n📱 **Sistema:** Status em tempo real\n📊 **Dashboard:** Visão geral das operações\n⏰ **Prazo:** Até 5 dias úteis\n\n🔔 **Você será notificado de qualquer mudança!**'
+  'criar': 'Nova Operação - Excelente escolha!\n\nProcesso em 4 etapas:\n1. Tipo de Cliente\n2. Dados do Cliente\n3. Dados da Operação\n4. Confirmação\n\nQuer um tour guiado? Digite "tour operação"!',
+  'como preencher formulário': 'Como Preencher o Formulário de Operação:\n\n- Etapa 1: Selecione o cliente existente\n- Etapa 2: Escolha o tipo de operação\n- Etapa 3: Defina o valor solicitado\n- Etapa 4: Adicione observações (opcional)\n- Etapa 5: Revise e envie\n\nPrecisa de ajuda com alguma etapa específica? Digite "tour operação" para um guia completo!',
+  'status das operações': 'Status das Operações:\n\nRASCUNHO - Operação não enviada\nENVIADO - Aguardando análise\nEM ANÁLISE - Sendo avaliada\nAPROVADO - Crédito liberado\nREJEITADO - Não aprovado\n\nVocê pode acompanhar em tempo real!',
+  'status': 'Status das Operações:\n\nRascunho\nEnviado\nEm Análise\nAprovado\nRejeitado',
+  'formulario': 'Dados necessários:\n1. Selecionar cliente\n2. Tipo de operação\n3. Valor solicitado\n4. Observações',
+  'credito': 'Modalidades de Crédito Rural:\n- Custeio agrícola\n- Investimento\n- Comercialização\n- Industrialização',
+  'analise': 'Processo de Análise:\nApós envio → Em Análise → Você recebe atualizações por email → Decisão final',
+  'modalidades disponíveis': 'Modalidades de Crédito Disponíveis:\n\nCUSTEIO AGRÍCOLA\n- Financiamento da safra\n- Compra de insumos\n- Mão de obra\n\nINVESTIMENTO\n- Máquinas e equipamentos\n- Construções rurais\n- Melhoramento da propriedade\n\nCOMERCIALIZAÇÃO\n- Estocagem da produção\n- Beneficiamento\n- Transporte\n\nINDUSTRIALIZAÇÃO\n- Processamento agrícola\n- Agregação de valor\n\nQual modalidade te interessa?',
+  'acompanhar análise': 'Como Acompanhar a Análise:\n\nEmail: Notificações automáticas\nSistema: Status em tempo real\nDashboard: Visão geral das operações\nPrazo: Até 5 dias úteis\n\nVocê será notificado de qualquer mudança!'
     },
     tours: ['tour-nova-operacao', 'tour-acompanhar-operacoes'],
-    quickActions: ['Como preencher formulário?', 'Status das operações', 'Modalidades disponíveis', 'Tour completo'],
+    quickActions: ['Como preencher formulário?', 'Status das operações', 'Tour completo'],
     synonyms: {
       'criar': ['nova', 'iniciar', 'começar', 'solicitar'],
       'operação': ['processo', 'transação', 'solicitação', 'pedido'],

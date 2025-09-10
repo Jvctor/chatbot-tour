@@ -13,8 +13,8 @@ export const useContext = () => {
         return {
           route: pathname,
           pageType: 'clients',
-          availableActions: ['Criar cliente', 'Editar cliente', 'Ver detalhes'],
-          relevantHelp: ['Como criar cliente', 'Tipos de cliente', 'Campos obrigatórios']
+          availableActions: ['Criar cliente'],
+          relevantHelp: ['Como criar cliente', 'Tipos de cliente']
         };
       }
       

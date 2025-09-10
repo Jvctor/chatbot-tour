@@ -230,15 +230,15 @@ function getWelcomeMessageForPage(pathname: string): ChatMessage {
   
   const welcomeMessages = {
     clients: {
-      content: '👋 Olá! Estou aqui para te ajudar com **clientes**!\n\n🎯 **Posso te ajudar com:**\n• Como criar um cliente?\n• Diferença entre tipos de cliente\n• Campos obrigatórios\n• Tour completo de criação\n\n💬 **Digite sua dúvida ou escolha uma das sugestões!**',
+      content: 'Olá! Estou aqui para te ajudar com clientes!\n\nPosso te ajudar com:\n• Como criar um cliente?\n• Diferença entre tipos de cliente\n• Tour completo de criação\n\nDigite sua dúvida ou escolha uma das sugestões!',
       suggestions: ['Como criar um cliente?', 'Diferença entre tipos?', 'Campos obrigatórios']
     },
     operations: {
-      content: '👋 Olá! Estou aqui para te ajudar com **operações**!\n\n🎯 **Posso te ajudar com:**\n• Como preencher formulário?\n• Status das operações\n• Modalidades disponíveis\n• Tour completo do processo\n\n💬 **Digite sua dúvida ou escolha uma das sugestões!**',
+      content: 'Olá! Estou aqui para te ajudar com operações!\n\nPosso te ajudar com:\n• Como preencher formulário?\n• Status das operações\n• Modalidades disponíveis\n• Tour completo do processo\n\nDigite sua dúvida ou escolha uma das sugestões!',
       suggestions: ['Como preencher formulário?', 'Status das operações', 'Modalidades disponíveis']
     },
     dashboard: {
-      content: '👋 Olá! Sou seu assistente virtual!\n\n🎯 **Posso te ajudar com:**\n• Navegação no sistema\n• Criação de clientes\n• Gestão de operações\n• Tours guiados\n\n💬 **O que você gostaria de fazer?**',
+      content: 'Olá! Sou seu assistente virtual!\n\nPosso te ajudar com:\n• Navegação no sistema\n• Criação de clientes\n• Gestão de operações\n• Tours guiados\n\nDigite sua dúvida ou escolha uma das sugestões!',
       suggestions: ['Tour do sistema', 'Criar cliente', 'Nova operação']
     }
   };

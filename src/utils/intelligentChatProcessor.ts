@@ -101,7 +101,6 @@ export class IntelligentChatProcessor {
     const normalizedMessage = message.toLowerCase().trim();
     const currentContext = this.getCurrentContext();
 
-    // Verifica palavras ambíguas
     for (const [keyword, ambiguousConfig] of Object.entries(knowledgeBase.contextualLogic.ambiguousKeywords)) {
       if (normalizedMessage.includes(keyword) && intentAnalysis.confidence < 0.7) {
         const contextualMessage = ambiguousConfig.contexts[currentContext] || ambiguousConfig.contexts.global;
@@ -119,7 +118,6 @@ export class IntelligentChatProcessor {
       needsDisambiguation: false
     };
   }
-
   
   private generateResponse(
     message: string, 
@@ -183,9 +181,6 @@ export class IntelligentChatProcessor {
     return bestMatch;
   }
 
-  /**
-   * 🗂️ Obtém dados do contexto atual
-   */
   private getContextData(context: string) {
     switch (context) {
       case 'clients':
@@ -263,8 +258,8 @@ export class IntelligentChatProcessor {
 
   private getContextualFallback(context: string): string {
     const fallbacks: Record<string, string> = {
-      'clients': '👤 **Área de Clientes** - Posso te ajudar com:\n• Criar novo cliente\n• Tipos de cliente\n\nO que você gostaria de fazer?',
-      'operations': '💼 **Área de Operações** - Estou aqui para:\n• Criar nova operação\n• Acompanhar status\n• Explicar processo\n\n*Como posso ajudar?*',
+      'clients': ' Área de Clientes - Posso te ajudar com:\n• Criar novo cliente\n• Tipos de cliente\n\nO que você gostaria de fazer?',
+      'operations': 'Área de Operações - Estou aqui para:\n• Criar nova operação\n• Acompanhar status\n• Explicar processo\n\n*Como posso ajudar?*',
       'global': knowledgeBase.global.responses.fallback
     };
 
