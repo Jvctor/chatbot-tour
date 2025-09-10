@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
+import { AssistantIcon } from './AssistantIcon';
 
 interface AnimatedAvatarProps {
   state: 'idle' | 'thinking' | 'speaking';
@@ -45,13 +47,7 @@ const AnimatedAvatar: React.FC<AnimatedAvatarProps> = ({ state, size = 'md' }) =
     }
   };
 
-  const getEmoji = () => {
-    switch (state) {
-      case 'thinking': return '🤔';
-      case 'speaking': return '🤖';
-      default: return '😊';
-    }
-  };
+
 
   const getGlowEffect = () => {
     switch (state) {
@@ -66,7 +62,7 @@ const AnimatedAvatar: React.FC<AnimatedAvatarProps> = ({ state, size = 'md' }) =
 
   return (
     <motion.div
-      className={`${getSizeClasses()} bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm ${getGlowEffect()}`}
+      className={`${getSizeClasses()} bg-white rounded-full flex items-center justify-center ${getGlowEffect()}`}
       animate={getAnimation()}
       whileHover={{ scale: 1.1 }}
       title={`Assistente está ${state === 'thinking' ? 'pensando' : state === 'speaking' ? 'falando' : 'disponível'}`}
@@ -78,7 +74,7 @@ const AnimatedAvatar: React.FC<AnimatedAvatarProps> = ({ state, size = 'md' }) =
         } : {}}
         transition={{ duration: 0.6, repeat: state === 'speaking' ? Infinity : 0 }}
       >
-        {getEmoji()}
+        <AssistantIcon state={state} size={size} />
       </motion.span>
        {state === 'thinking' && (
         <motion.div
