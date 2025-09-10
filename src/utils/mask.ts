@@ -1,4 +1,9 @@
-// Função para aplicar máscara de CNPJ (00.000.000/0000-00)
+export function maskMoney(value: string): string {
+  const digits = value.replace(/\D/g, '');
+  const number = (parseInt(digits, 10) / 100).toFixed(2);
+  if (isNaN(Number(number))) return '';
+  return Number(number).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
 export function maskCNPJ(value: string): string {
   const digits = value.replace(/\D/g, '').slice(0, 14);
   return digits
@@ -19,7 +24,6 @@ export const formatDate = (date: Date) => {
   };
 
 export function maskCPF(value: string): string {
-  // Limita a 11 dígitos antes de aplicar a máscara
   const digits = value.replace(/\D/g, '').slice(0, 11);
   return digits
     .replace(/(\d{3})(\d)/, '$1.$2')
