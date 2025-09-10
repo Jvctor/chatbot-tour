@@ -8,7 +8,7 @@ export interface ChatMessage {
 
 export interface PageContext {
   route: string;
-  pageType: 'clients' | 'operations' | 'partners';
+  pageType: 'clients' | 'operations' | 'dashboard';
   availableActions: string[];
   relevantHelp: string[];
 }
@@ -62,4 +62,17 @@ export interface OperationData {
   amount: number;
   status: 'draft' | 'sent' | 'analyzing' | 'approved' | 'rejected';
   createdAt: Date;
+}
+
+export interface KnowledgeBaseItem {
+  keywords: string[];
+  responses: Record<string, string>;
+  tours: string[];
+  quickActions: string[];
+}
+
+export interface KnowledgeBase {
+  global: KnowledgeBaseItem;
+  clients: KnowledgeBaseItem;
+  operations: KnowledgeBaseItem;
 }
