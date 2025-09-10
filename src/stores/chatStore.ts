@@ -17,7 +17,7 @@ interface ChatState {
 const initialMessage = {
   id: '1',
   type: 'assistant' as const,
-  content: 'Olá! 👋 Sou seu assistente virtual. Como posso te ajudar hoje?',
+  content: 'Olá! Sou seu assistente virtual. Como posso te ajudar hoje?',
   timestamp: new Date(),
 };
 
