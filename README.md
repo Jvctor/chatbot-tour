@@ -84,28 +84,47 @@ O sistema utiliza uma base de conhecimento (`knowledgeBase.ts`) e lógica de pro
 
 ## Instruções para executar o projeto
 
-1. **Pré-requisitos:**
+### 1. Rodando localmente
+
+**Pré-requisitos:**
   - Node.js 18+
   - npm 9+
 
-2. **Instale as dependências:**
+**Instale as dependências:**
+```sh
+npm install
+```
+
+**Execute o projeto em modo desenvolvimento:**
+```sh
+npm run dev
+```
+O app estará disponível em `http://localhost:5173`.
+
+**Build para produção:**
+```sh
+npm run build
+```
+
+**Outros comandos úteis:**
+- `npm run lint` — Lint do código
+- `npm run preview` — Preview do build
+
+---
+
+### 2. Rodando com Docker
+
+1. **Build da imagem Docker:**
   ```sh
-  npm install
+  docker build -t chatbot-tour .
   ```
 
-3. **Execute o projeto em modo desenvolvimento:**
+2. **Execute o container:**
   ```sh
-  npm run dev
+  docker run -p 8080:80 chatbot-tour
   ```
-  O app estará disponível em `http://localhost:5173`.
+  O app estará disponível em `http://localhost:8080`.
 
-4. **Build para produção:**
-  ```sh
-  npm run build
-  ```
-
-5. **Outros comandos úteis:**
-  - `npm run lint` — Lint do código
-  - `npm run preview` — Preview do build
+> O Dockerfile utiliza multi-stage build e Nginx para servir o build de produção. O arquivo `nginx.conf` já está configurado para SPA.
 
 ---
