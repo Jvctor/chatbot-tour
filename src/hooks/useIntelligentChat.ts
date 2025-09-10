@@ -20,9 +20,10 @@ export interface UseIntelligentChatReturn {
     lastConfidence: number;
     currentPage: string;
   };
+  onStartTour?: (tourId: string) => void;
 }
 
-export const useIntelligentChat = (): UseIntelligentChatReturn => {
+export const useIntelligentChat = (onStartTour?: (tourId: string) => void): UseIntelligentChatReturn => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -74,6 +75,35 @@ export const useIntelligentChat = (): UseIntelligentChatReturn => {
     try {
       // Processa mensagem com IA
       const result = chatProcessor.processMessage(userMessage, location.pathname);
+      
+      // Verifica se é um comando para iniciar tour
+      const tourCommand = detectTourCommand(userMessage, location.pathname);
+      if (tourCommand && onStartTour) {
+        // Adiciona resposta indicando que o tour vai iniciar
+        const tourMsg: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant',
+          content: `🚀 Perfeito! Vou iniciar o tour "${tourCommand.name}" para você. Prepare-se para uma experiência guiada passo a passo!\n\n✨ O tour começará em instantes...`,
+          timestamp: new Date(),
+          context: {
+            route: location.pathname,
+            pageType: getPageType(location.pathname),
+            availableActions: [],
+            relevantHelp: []
+          }
+        };
+        
+        setMessages(prev => [...prev, tourMsg]);
+        setIsProcessing(false);
+        setIsTyping(false);
+        
+        // Inicia o tour após um pequeno delay
+        setTimeout(() => {
+          onStartTour(tourCommand.id);
+        }, 1000);
+        
+        return;
+      }
       
       setIsProcessing(false);
       
@@ -159,9 +189,54 @@ export const useIntelligentChat = (): UseIntelligentChatReturn => {
     needsDisambiguation,
     disambiguationOptions,
     handleDisambiguation,
-    sessionStats
+    sessionStats,
+    onStartTour
   };
 };
+
+// Função para detectar comandos de tour
+function detectTourCommand(message: string, pathname: string): { id: string; name: string } | null {
+  const normalizedMessage = message.toLowerCase().trim();
+  
+  // Padrões de comandos de tour
+  const tourPatterns = [
+    // Tour de criar cliente
+    {
+      patterns: ['como criar um cliente', 'criar cliente', 'tutorial cliente', 'tour cliente', 'guia cliente'],
+      id: 'tour-criar-cliente',
+      name: 'Como criar um cliente',
+      contexts: ['/clients', '/clients/create']
+    },
+    // Tour de nova operação
+    {
+      patterns: ['como criar operação', 'nova operação', 'tutorial operação', 'tour operação', 'guia operação', 'como preencher formulário'],
+      id: 'tour-nova-operacao',
+      name: 'Como criar uma operação',
+      contexts: ['/operations', '/operations/create']
+    },
+    // Tours genéricos
+    {
+      patterns: ['tour completo', 'guia completo', 'tutorial completo', 'passo a passo'],
+      id: pathname.includes('/clients') ? 'tour-criar-cliente' : 'tour-nova-operacao',
+      name: pathname.includes('/clients') ? 'Como criar um cliente' : 'Como criar uma operação',
+      contexts: ['/clients', '/operations', '/clients/create', '/operations/create']
+    }
+  ];
+  
+  for (const tour of tourPatterns) {
+    // Verifica se a mensagem contém algum padrão
+    const hasPattern = tour.patterns.some(pattern => normalizedMessage.includes(pattern));
+    
+    // Verifica se está no contexto correto
+    const isValidContext = tour.contexts.some(context => pathname.startsWith(context));
+    
+    if (hasPattern && isValidContext) {
+      return { id: tour.id, name: tour.name };
+    }
+  }
+  
+  return null;
+}
 
 // Funções auxiliares para contexto específico por página
 function getPageType(pathname: string): 'clients' | 'operations' | 'dashboard' {

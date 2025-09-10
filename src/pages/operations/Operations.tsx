@@ -5,8 +5,15 @@ import Table from '../../components/Table';
 import StatCard from '../../components/StatCard';
 import PageHeader from '../../components/PageHeader';
 import { formatDate } from '../../utils/mask';
+import { useTourContext } from '../../components/tour/TourProvider';
 
 const Operations: React.FC = () => {
+  const { startTour } = useTourContext();
+
+  const handleStartTour = () => {
+    startTour('tour-nova-operacao');
+  };
+
   const formatStatus = (status: string) => {
     const statusMap = {
       'approved': 'Aprovado',
@@ -26,6 +33,7 @@ const Operations: React.FC = () => {
             type: 'button',
             text: 'Tour: Criar Operação',
             icon: PlayIcon,
+            onClick: handleStartTour,
             className: 'bg-secondary hover:bg-secondary-dark text-white'
           },
           {

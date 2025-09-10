@@ -210,7 +210,7 @@ export function generateResponseVariation(baseResponse: string, variation: numbe
 // Gera seguimento contextual
 export function generateContextualFollowUp(
   intent: string, 
-  context?: string
+  _context?: string
 ): string {
   const followUps: Record<string, string[]> = {
     'create_client': [

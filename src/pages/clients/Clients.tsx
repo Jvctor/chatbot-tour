@@ -5,8 +5,15 @@ import { mockClients } from '../../data/mockData';
 import Table from '../../components/Table';
 import StatCard from '../../components/StatCard';
 import PageHeader from '../../components/PageHeader';
+import { useTourContext } from '../../components/tour/TourProvider';
 
 const Clients: React.FC = () => {
+  const { startTour } = useTourContext();
+
+  const handleStartTour = () => {
+    startTour('tour-criar-cliente');
+  };
+
   return (
     <div className="flex-1 p-6">
       <PageHeader
@@ -17,6 +24,7 @@ const Clients: React.FC = () => {
             type: 'button',
             text: 'Tour: Criar Cliente',
             icon: PlayIcon,
+            onClick: handleStartTour,
             className: 'bg-secondary hover:bg-secondary-dark text-white'
           },
           {

@@ -19,7 +19,6 @@ const TourOverlay: React.FC = () => {
 
   const step = getCurrentStep();
 
-  // Encontra e destaca o elemento do passo atual
   useEffect(() => {
     if (!step || !isActive) {
       setHighlightedElement(null);
@@ -32,12 +31,10 @@ const TourOverlay: React.FC = () => {
       if (element) {
         setHighlightedElement(element);
         
-        // Aguarda um frame para garantir que o elemento está renderizado
         requestAnimationFrame(() => {
           const rect = element.getBoundingClientRect();
           setElementRect(rect);
           
-          // Scroll para o elemento de forma mais suave
           element.scrollIntoView({
             behavior: 'smooth',
             block: 'center',
@@ -45,16 +42,13 @@ const TourOverlay: React.FC = () => {
           });
         });
       } else {
-        // Se não encontrar, tenta novamente após delay maior
         setTimeout(findElement, 1000);
       }
     };
 
-    // Tenta encontrar o elemento imediatamente
     findElement();
   }, [step, isActive]);
 
-  // Atualiza posição do elemento quando a janela redimensiona
   useEffect(() => {
     const updateElementRect = () => {
       if (highlightedElement) {
@@ -77,11 +71,9 @@ const TourOverlay: React.FC = () => {
 
   const handleNext = () => {
     if (step.action === 'click' && highlightedElement) {
-      // Se for uma ação de clique, executa o clique automaticamente
       try {
         (highlightedElement as HTMLElement).click();
         
-        // Aguarda um pouco mais antes de ir para o próximo passo
         setTimeout(() => {
           nextStep();
         }, 1000);
@@ -90,7 +82,6 @@ const TourOverlay: React.FC = () => {
         nextStep();
       }
     } else if (step.action === 'navigate') {
-      // Para navegação, aguarda mais tempo para a página carregar
       setTimeout(() => {
         nextStep();
       }, 1500);
@@ -109,58 +100,107 @@ const TourOverlay: React.FC = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-50"
-        style={{ pointerEvents: 'auto' }}
+        style={{ pointerEvents: 'none' }}
       >
-        {/* Background Overlay */}
-        <div 
-          className="absolute inset-0 bg-black bg-opacity-75"
-          onClick={endTour}
-          style={{ zIndex: 50 }}
-        />
+        {elementRect ? (
+          <>
+            <div 
+              className="absolute bg-black bg-opacity-20"
+              style={{
+                top: 0,
+                left: 0,
+                right: 0,
+                height: elementRect.top - 4,
+                zIndex: 51,
+                pointerEvents: 'auto'
+              }}
+              onClick={endTour}
+            />
+            
+            <div 
+              className="absolute bg-black bg-opacity-20"
+              style={{
+                top: elementRect.bottom + 4,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 51,
+                pointerEvents: 'auto'
+              }}
+              onClick={endTour}
+            />
+            
+            {/* Left overlay */}
+            <div 
+              className="absolute bg-black bg-opacity-20"
+              style={{
+                top: elementRect.top - 4,
+                left: 0,
+                width: elementRect.left - 4,
+                height: elementRect.height + 8,
+                zIndex: 51,
+                pointerEvents: 'auto'
+              }}
+              onClick={endTour}
+            />
+            
+            <div 
+              className="absolute bg-black bg-opacity-20"
+              style={{
+                top: elementRect.top - 4,
+                left: elementRect.right + 4,
+                right: 0,
+                height: elementRect.height + 8,
+                zIndex: 51,
+                pointerEvents: 'auto'
+              }}
+              onClick={endTour}
+            />
+          </>
+        ) : (
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-20"
+            onClick={endTour}
+            style={{ zIndex: 51, pointerEvents: 'auto' }}
+          />
+        )}
 
-        {/* Clickable area over highlighted element */}
+        {elementRect && (
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="absolute pointer-events-none"
+            style={{
+              left: elementRect.left - 4,
+              top: elementRect.top - 4,
+              width: elementRect.width + 8,
+              height: elementRect.height + 8,
+              border: '2px solid #3B82F6',
+              borderRadius: '8px',
+              zIndex: 52,
+              boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.3)',
+            }}
+          />
+        )}
+
         {elementRect && (
           <div
             className="absolute cursor-pointer"
             style={{
-              left: elementRect.left - 8,
-              top: elementRect.top - 8,
-              width: elementRect.width + 16,
-              height: elementRect.height + 16,
-              zIndex: 52,
+              left: elementRect.left,
+              top: elementRect.top,
+              width: elementRect.width,
+              height: elementRect.height,
+              zIndex: 53,
               background: 'transparent',
+              pointerEvents: 'auto'
             }}
             onClick={handleNext}
             title="Clique aqui para continuar"
           />
         )}
 
-        {/* Spotlight */}
-        {elementRect && (
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="absolute"
-            style={{
-              left: elementRect.left - 8,
-              top: elementRect.top - 8,
-              width: elementRect.width + 16,
-              height: elementRect.height + 16,
-              background: 'transparent',
-              borderRadius: '8px',
-              border: '3px solid #3B82F6',
-              boxShadow: `
-                0 0 0 4px rgba(59, 130, 246, 0.3),
-                0 0 0 9999px rgba(0, 0, 0, 0.75)
-              `,
-              zIndex: 51,
-              pointerEvents: 'none',
-            }}
-          />
-        )}
-
-        {/* Tour Step Component */}
         {elementRect && (
           <TourStep
             step={step}

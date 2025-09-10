@@ -6,23 +6,26 @@ import EditClient from './pages/clients/EditClient'
 import Operacoes from './pages/operations/Operations'
 import CreateOperation from './pages/operations/CreateOperation'
 import ChatWidget from './components/chatbot/ChatWidget'
+import TourProvider from './components/tour/TourProvider'
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Navigate to="/clients" replace />} />
-          <Route path="/clients" element={<Clients />} />
-          <Route path="/clients/create" element={<CreateClient />} />
-          <Route path="/clients/edit/:id" element={<EditClient />} />
-          <Route path="/operations" element={<Operacoes />} />
-          <Route path="/operations/create" element={<CreateOperation />} />
-          <Route path="/dashboard" />
-        </Routes>
-      </Layout>
-      <ChatWidget />
-    </Router>
+    <TourProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Navigate to="/clients" replace />} />
+            <Route path="/clients" element={<Clients />} />
+            <Route path="/clients/create" element={<CreateClient />} />
+            <Route path="/clients/edit/:id" element={<EditClient />} />
+            <Route path="/operations" element={<Operacoes />} />
+            <Route path="/operations/create" element={<CreateOperation />} />
+            <Route path="/dashboard" />
+          </Routes>
+        </Layout>
+        <ChatWidget />
+      </Router>
+    </TourProvider>
   )
 }
 

@@ -3,10 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { useIntelligentChat } from '../../hooks/useIntelligentChat';
 import { useChatStore } from '../../stores/chatStore';
+import { useTourContext } from '../tour/TourProvider';
 import ChatWindowIntelligent from './ChatWindowIntelligent';
 
 const ChatWidget: React.FC = () => {
-  const chatHook = useIntelligentChat();
+  const { startTour } = useTourContext();
+  const chatHook = useIntelligentChat(startTour);
   const { isOpen, toggleChat } = useChatStore();
 
   return (

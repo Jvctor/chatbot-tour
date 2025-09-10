@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { PaperAirplaneIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useTourStore } from '../../stores/tourStore';
 import { useChatStore } from '../../stores/chatStore';
 import type { UseIntelligentChatReturn } from '../../hooks/useIntelligentChat';
 import MessageBubble from './MessageBubble';
@@ -16,7 +15,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   
   const { toggleChat } = useChatStore();
-  const { startTour } = useTourStore();
 
   // Usando apenas a implementação inteligente
   const {
