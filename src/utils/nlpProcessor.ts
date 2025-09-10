@@ -207,7 +207,6 @@ export function generateResponseVariation(baseResponse: string, variation: numbe
   return baseResponse;
 }
 
-// Gera seguimento contextual
 export function generateContextualFollowUp(
   intent: string, 
   _context?: string

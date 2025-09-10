@@ -105,8 +105,9 @@ const TourOverlay: React.FC = () => {
         {elementRect ? (
           <>
             <div 
-              className="absolute bg-black bg-opacity-20"
+              className="absolute"
               style={{
+                background: 'rgba(0,0,0,0.20)',
                 top: 0,
                 left: 0,
                 right: 0,
@@ -118,8 +119,9 @@ const TourOverlay: React.FC = () => {
             />
             
             <div 
-              className="absolute bg-black bg-opacity-20"
+              className="absolute"
               style={{
+                background: 'rgba(0,0,0,0.20)',
                 top: elementRect.bottom + 4,
                 left: 0,
                 right: 0,
@@ -132,8 +134,9 @@ const TourOverlay: React.FC = () => {
             
             {/* Left overlay */}
             <div 
-              className="absolute bg-black bg-opacity-20"
+              className="absolute"
               style={{
+                background: 'rgba(0,0,0,0.20)',
                 top: elementRect.top - 4,
                 left: 0,
                 width: elementRect.left - 4,
@@ -145,8 +148,9 @@ const TourOverlay: React.FC = () => {
             />
             
             <div 
-              className="absolute bg-black bg-opacity-20"
+              className="absolute"
               style={{
+                background: 'rgba(0,0,0,0.20)',
                 top: elementRect.top - 4,
                 left: elementRect.right + 4,
                 right: 0,
@@ -159,9 +163,9 @@ const TourOverlay: React.FC = () => {
           </>
         ) : (
           <div 
-            className="absolute inset-0 bg-black bg-opacity-20"
+            className="absolute inset-0"
             onClick={endTour}
-            style={{ zIndex: 51, pointerEvents: 'auto' }}
+            style={{ background: 'rgba(0,0,0,0.20)', zIndex: 51, pointerEvents: 'auto' }}
           />
         )}
 
