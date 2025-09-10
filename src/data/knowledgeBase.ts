@@ -29,7 +29,6 @@ export const knowledgeBase: KnowledgeBase = {
   'agricultura': 'Tipo Agricultura é para pessoas físicas e pequenos produtores rurais.',
   'agronegocio': 'Tipo Agronegócio é para empresas e grandes produtores do setor.',
   'como editar cliente': 'Editar Cliente:\n\n1. Vá para a lista de clientes\n2. Clique no ícone de edição\n3. Modifique os campos necessários\n4. Salve as alterações\n\nAtenção: Tipo de cliente não pode ser alterado após criação.',
-  'campos obrigatórios': 'Campos Obrigatórios:\n\nNome: Nome completo ou razão social\n**Tipo:** Agricultura ou Agronegócio\n**Documento:** CPF (11 dígitos) ou CNPJ (14 dígitos)\n**Email:** Endereço válido para contato\n**Telefone:** Número com DDD\n\nTodos os campos são necessários para prosseguir!'
     },
     tours: ['tour-criar-cliente', 'tour-gerenciar-clientes'],
     quickActions: ['Como criar um cliente?', 'Diferença entre tipos?', 'Tour completo'],
@@ -64,42 +63,37 @@ export const knowledgeBase: KnowledgeBase = {
     }
   },
 
-  // 🧠 SISTEMA DE CONTEXTO INTELIGENTE
   contextualLogic: {
     pageContext: {
       '/': 'global',
       '/dashboard': 'global',
       '/clients': 'clients',
-      '/clients/create': 'clients',
-      '/clients/edit': 'clients',
       '/operations': 'operations',
-      '/operations/create': 'operations',
-      '/operations/edit': 'operations'
     },
     ambiguousKeywords: {
       'criar': {
-        question: '🤔 O que você gostaria de criar?',
+        question: 'O que você gostaria de criar?',
         contexts: {
           'clients': 'Detectei que você está na área de clientes. Quer **criar um cliente**?',
           'operations': 'Você está na área de operações. Quer **criar uma operação**?',
           'global': 'Posso te ajudar a criar:'
         },
         options: [
-          { text: '👤 Criar Cliente', action: 'clients.criar', context: 'clients' },
-          { text: '💼 Criar Operação', action: 'operations.criar', context: 'operations' },
-          { text: '🎯 Me diga mais sobre o que precisa', action: 'global.ajuda' }
+          { text: 'Criar Cliente', action: 'Criar cliente', context: 'clients' },
+          { text: 'Criar Operação', action: 'Criar operação', context: 'operations' },
+          { text: 'Me diga mais sobre o que precisa', action: 'global.ajuda' }
         ]
       },
       'novo': {
-        question: '✨ Que tipo de cadastro você quer fazer?',
+        question: 'Que tipo de cadastro você quer fazer?',
         contexts: {
-          'clients': 'Na área de clientes você pode criar um **novo cliente**.',
-          'operations': 'Na área de operações você pode criar uma **nova operação**.',
+          'clients': 'Na área de clientes você pode criar um novo cliente.',
+          'operations': 'Na área de operações você pode criar uma nova operação.',
           'global': 'Você pode criar:'
         },
         options: [
-          { text: '👤 Novo Cliente', action: 'clients.criar' },
-          { text: '💼 Nova Operação', action: 'operations.criar' }
+          { text: 'Novo Cliente', action: 'Criar cliente', context: 'clients' },
+          { text: 'Nova Operação', action: 'Criar operação', context: 'operations' }
         ]
       }
     },
@@ -110,28 +104,21 @@ export const knowledgeBase: KnowledgeBase = {
     }
   },
 
-  // 🎯 SISTEMA DE INTENÇÕES E CONFIANÇA
   intentMatching: {
     patterns: [
-      // Intenções de alta confiança - Clientes
       { intent: 'create_client', keywords: ['criar cliente', 'novo cliente', 'cadastrar cliente'], confidence: 0.95, context: 'clients' },
       { intent: 'client_help', keywords: ['como criar um cliente', 'como criar cliente'], confidence: 0.95, context: 'clients' },
       { intent: 'client_types', keywords: ['diferença entre tipos', 'tipos de cliente', 'agricultura agronegócio'], confidence: 0.9, context: 'clients' },
-      { intent: 'client_fields', keywords: ['campos obrigatórios', 'formulário cliente'], confidence: 0.9, context: 'clients' },
       { intent: 'edit_client', keywords: ['como editar cliente', 'editar cliente'], confidence: 0.9, context: 'clients' },
       
-      // Intenções de alta confiança - Operações
       { intent: 'create_operation', keywords: ['criar operação', 'nova operação', 'solicitar crédito'], confidence: 0.95, context: 'operations' },
       { intent: 'operation_form', keywords: ['como preencher formulário', 'preencher formulário'], confidence: 0.95, context: 'operations' },
       { intent: 'operation_status', keywords: ['status das operações', 'status operação'], confidence: 0.9, context: 'operations' },
-      { intent: 'credit_types', keywords: ['modalidades disponíveis', 'tipos de crédito'], confidence: 0.9, context: 'operations' },
       { intent: 'follow_analysis', keywords: ['acompanhar análise', 'acompanhar operação'], confidence: 0.9, context: 'operations' },
       
-      // Intenções de média confiança
       { intent: 'help_clients', keywords: ['ajuda cliente', 'como cadastrar'], confidence: 0.7, context: 'clients' },
       { intent: 'help_operations', keywords: ['ajuda operação', 'como solicitar'], confidence: 0.7, context: 'operations' },
       
-      // Intenções de baixa confiança (precisam contexto)
       { intent: 'ambiguous_create', keywords: ['criar', 'novo', 'cadastrar'], confidence: 0.4 },
       { intent: 'ambiguous_help', keywords: ['ajuda', 'como'], confidence: 0.3 },
       { intent: 'general_navigation', keywords: ['ir para', 'navegar', 'página'], confidence: 0.5 }
@@ -139,15 +126,14 @@ export const knowledgeBase: KnowledgeBase = {
     confidenceThreshold: 0.6
   },
 
-  // 💾 GERENCIAMENTO DE SESSÃO
   sessionManagement: {
     rememberContext: true,
     maxHistorySize: 10,
     contextWeights: {
-      'currentPage': 0.4,      // 40% peso para página atual
-      'recentMessages': 0.3,   // 30% peso para mensagens recentes
-      'userIntent': 0.2,       // 20% peso para intenção detectada
-      'timeContext': 0.1       // 10% peso para contexto temporal
+      'currentPage': 0.4,
+      'recentMessages': 0.3,
+      'userIntent': 0.2,
+      'timeContext': 0.1
     }
   }
 };

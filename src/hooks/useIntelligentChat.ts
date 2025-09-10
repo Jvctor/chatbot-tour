@@ -231,7 +231,7 @@ function getWelcomeMessageForPage(pathname: string): ChatMessage {
   const welcomeMessages = {
     clients: {
       content: 'Olá! Estou aqui para te ajudar com clientes!\n\nPosso te ajudar com:\n• Como criar um cliente?\n• Diferença entre tipos de cliente\n• Tour completo de criação\n\nDigite sua dúvida ou escolha uma das sugestões!',
-      suggestions: ['Como criar um cliente?', 'Diferença entre tipos?', 'Campos obrigatórios']
+      suggestions: ['Como criar um cliente?', 'Diferença entre tipos?']
     },
     operations: {
       content: 'Olá! Estou aqui para te ajudar com operações!\n\nPosso te ajudar com:\n• Como preencher formulário?\n• Status das operações\n\n• Tour completo do processo\n\nDigite sua dúvida ou escolha uma das sugestões!',
@@ -263,12 +263,9 @@ function getPageSpecificSuggestions(pathname: string): string[] {
   const pageType = getPageType(pathname);
   
   const suggestionMap = {
-    '/clients': ['Como criar um cliente?', 'Diferença entre tipos?', 'Campos obrigatórios'],
-    '/clients/edit': ['Quais campos posso editar?', 'Como salvar alterações', 'Cancelar edição'],
-    
-    '/operations': ['Como preencher formulário?', 'Status das operações', 'Modalidades disponíveis'],
-    '/operations/edit': ['Como alterar dados?', 'Reenviar operação', 'Cancelar operação'],
-    
+    '/clients': ['Como criar um cliente?', 'Diferença entre tipos?', 'Tour completo'],
+    '/operations': ['Como preencher formulário?', 'Status das operações', 'Tour completo'],
+
     '/': ['Tour do sistema', 'Criar cliente', 'Nova operação'],
     '/dashboard': ['Visão geral', 'Próximos passos', 'Estatísticas']
   };
