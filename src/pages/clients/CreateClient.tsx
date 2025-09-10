@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import PageHeader from '../../components/PageHeader';
+import Notification from '../../components/Notification';
 
 const CreateClient: React.FC = () => {
   const navigate = useNavigate();
@@ -21,12 +22,17 @@ const CreateClient: React.FC = () => {
     }));
   };
 
+
+  const [showNotification, setShowNotification] = useState(false);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-        
     setTimeout(() => {
-      alert('Cliente criado com sucesso!');
-      navigate('/clients');
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false);
+        navigate('/clients');
+      }, 1800);
     }, 1000);
   };
 
@@ -34,6 +40,13 @@ const CreateClient: React.FC = () => {
 
   return (
     <div className="p-6">
+      {showNotification && (
+        <Notification
+          message="Cliente criado com sucesso!"
+          type="success"
+          onClose={() => setShowNotification(false)}
+        />
+      )}
       <PageHeader
         title="Novo Cliente"
         subtitle="Preencha os dados para cadastrar um novo cliente"
@@ -110,7 +123,6 @@ const CreateClient: React.FC = () => {
                   type="email"
                   id="email"
                   name="email"
-                  data-testid="client-email-input"
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="email@exemplo.com"
@@ -126,7 +138,6 @@ const CreateClient: React.FC = () => {
                   type="tel"
                   id="phone"
                   name="phone"
-                  data-testid="client-phone-input"
                   value={formData.phone}
                   onChange={handleInputChange}
                   placeholder="(11) 99999-9999"

@@ -2,16 +2,20 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { mockClients } from '../../data/mockData';
+
 import PageHeader from '../../components/PageHeader';
+import Notification from '../../components/Notification';
 
 const CreateOperation: React.FC = () => {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     clientId: '',
     type: '',
     amount: '',
     description: '',
   });
+  const [showNotification, setShowNotification] = useState(false);
 
   const operationTypes = [
     'Custeio Agrícola',
@@ -31,27 +35,26 @@ const CreateOperation: React.FC = () => {
     }));
   };
 
-
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-
-    
     setTimeout(() => {
-      alert('Operação criada com sucesso!');
-      navigate('/operations');
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false);
+        navigate('/operations');
+      }, 1800);
     }, 1000);
   };
 
-
-
-
-
-
-
   return (
     <div className="p-6">
+      {showNotification && (
+        <Notification
+          message="Operação criada com sucesso!"
+          type="success"
+          onClose={() => setShowNotification(false)}
+        />
+      )}
       <PageHeader
         title="Nova Operação"
         subtitle="Crie uma nova operação de crédito rural"
@@ -150,7 +153,7 @@ const CreateOperation: React.FC = () => {
               <button
                 type="submit"
                 data-testid="submit-operation"
-                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                className="px-4 py-2 bg-primary text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={
                   !formData.clientId ||
                   !formData.type ||

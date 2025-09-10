@@ -259,7 +259,7 @@ export class IntelligentChatProcessor {
   private getContextualFallback(context: string): string {
     const fallbacks: Record<string, string> = {
       'clients': ' Área de Clientes - Posso te ajudar com:\n• Criar novo cliente\n• Tipos de cliente\n\nO que você gostaria de fazer?',
-      'operations': 'Área de Operações - Estou aqui para:\n• Criar nova operação\n• Acompanhar status\n• Explicar processo\n\n*Como posso ajudar?*',
+      'operations': 'Área de Operações - Estou aqui para:\n• Criar nova operação\n• Acompanhar status\n\nComo posso ajudar?',
       'global': knowledgeBase.global.responses.fallback
     };
 

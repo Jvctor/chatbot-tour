@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { mockClients } from '../../data/mockData';
+import Notification from '../../components/Notification';
 
 const EditClient: React.FC = () => {
   const navigate = useNavigate();
@@ -41,12 +42,16 @@ const EditClient: React.FC = () => {
     }));
   };
 
+  const [showNotification, setShowNotification] = useState(false);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     setTimeout(() => {
-      alert('Cliente atualizado com sucesso!');
-      navigate('/clients');
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false);
+        navigate('/clients');
+      }, 1800);
     }, 1000);
   };
 
@@ -87,6 +92,13 @@ const EditClient: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {showNotification && (
+        <Notification
+          message="Cliente atualizado com sucesso!"
+          type="success"
+          onClose={() => setShowNotification(false)}
+        />
+      )}
       <div className="p-6 pb-0">
         <div className="flex items-center space-x-4 mb-6">
           <Link
@@ -124,8 +136,6 @@ const EditClient: React.FC = () => {
                 required
               />
             </div>
-
-            {/* Tipo de Cliente e Documento */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2">
@@ -161,8 +171,6 @@ const EditClient: React.FC = () => {
                 />
               </div>
             </div>
-
-            {/* Email e Telefone */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
@@ -179,7 +187,6 @@ const EditClient: React.FC = () => {
                   required
                 />
               </div>
-
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
                   Telefone *
@@ -196,14 +203,12 @@ const EditClient: React.FC = () => {
                 />
               </div>
             </div>
-
-            {/* Actions */}
             <div className="flex justify-end pt-6">
               <button
                 type="submit"
                 data-testid="save-client-btn"
                 disabled={!isFormValid}
-                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg transition-colors text-sm"
+                className="bg-primary disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg transition-colors text-sm"
               >
                 Atualizar Cliente
               </button>
