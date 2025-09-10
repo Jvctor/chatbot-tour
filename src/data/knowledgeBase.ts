@@ -29,7 +29,7 @@ export const knowledgeBase: KnowledgeBase = {
   operations: {
     keywords: ['operação', 'nova', 'criar', 'formulário', 'status', 'crédito', 'análise'],
     responses: {
-      'nova operacão': 'O processo tem 4 etapas: Tipo de Cliente, Dados do Cliente, Dados da Operação e Confirmação. Posso te guiar!',
+      'nova operação': 'O processo tem 4 etapas: Tipo de Cliente, Dados do Cliente, Dados da Operação e Confirmação. Posso te guiar!',
       'status': 'Os status possíveis são: Rascunho, Enviado, Em Análise, Aprovado, Rejeitado.',
       'formulario': 'Primeiro selecione o cliente, depois preencha tipo de operação, valor e observações.',
       'credito': 'Oferecemos várias modalidades de crédito rural adaptadas ao seu perfil.',

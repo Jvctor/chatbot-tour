@@ -3,9 +3,8 @@ import { motion } from 'framer-motion';
 import { PaperAirplaneIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useTourStore } from '../../stores/tourStore';
 import { useChatStore } from '../../stores/chatStore';
-import type { ChatMessage } from '../../types'; 
 import MessageBubble from './MessageBubble';
-// Lazy loading das dependências pesadas
+
 const loadChatDependencies = async () => {
   const [
     { matchKeywords, getQuickActions },
@@ -168,8 +167,7 @@ const ChatWindow: React.FC = () => {
   };
 
   return (
-    <div className="w-80 h-96 bg-white rounded-lg shadow-xl border overflow-hidden flex flex-col">
-      {/* Header */}
+    <div className="w-85 h-110 bg-white rounded-lg shadow-xl border overflow-hidden flex flex-col">
       <div className="bg-primary from-blue-600 to-purple-600 p-4 text-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -206,7 +204,6 @@ const ChatWindow: React.FC = () => {
         </div>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((message) => (
           <MessageBubble key={message.id} message={message} />

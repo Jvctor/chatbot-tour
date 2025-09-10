@@ -6,7 +6,7 @@ import { useChatStore } from '../../stores/chatStore';
 import ChatWindow from './ChatWindow';
 
 const ChatWidget: React.FC = () => {
-  useContext(); // Hook para detectar mudanças de contexto
+  useContext(); 
   
   const { isOpen, toggleChat } = useChatStore();
 
@@ -29,7 +29,7 @@ const ChatWidget: React.FC = () => {
       {!isOpen && (
         <motion.button
           onClick={toggleChat}
-          className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 shadow-lg transition-colors duration-200"
+          className="bg-secondary  text-white rounded-full p-3 shadow-lg transition-colors duration-200"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >

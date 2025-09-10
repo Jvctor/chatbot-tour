@@ -7,7 +7,6 @@ export const matchKeywords = (
 ): string => {
   const lowerMessage = message.toLowerCase();
   
-  // Determina qual seção da base de conhecimento usar
   let relevantKnowledge: KnowledgeBaseItem;
   
   if (context?.pageType === 'clients') {
@@ -18,20 +17,17 @@ export const matchKeywords = (
     relevantKnowledge = knowledgeBase.global;
   }
 
-  // Procura por correspondências exatas primeiro
   for (const [key, response] of Object.entries(relevantKnowledge.responses)) {
     if (lowerMessage.includes(key.toLowerCase())) {
       return response;
     }
   }
 
-  // Procura por palavras-chave
   const hasKeyword = relevantKnowledge.keywords.some(keyword =>
     lowerMessage.includes(keyword.toLowerCase())
   );
 
   if (hasKeyword) {
-    // Retorna uma resposta contextual baseada na página
     if (context?.pageType === 'clients') {
       return 'Estou aqui para te ajudar com clientes! Posso te guiar para criar um novo cliente ou explicar os tipos disponíveis. O que precisa?';
     } else if (context?.pageType === 'operations') {
@@ -39,22 +35,18 @@ export const matchKeywords = (
     }
   }
 
-  // Saudações
   if (['oi', 'olá', 'hello', 'ola'].some(greeting => lowerMessage.includes(greeting))) {
     return knowledgeBase.global.responses.saudacao;
   }
 
-  // Tour
   if (['tour', 'guia', 'tutorial'].some(word => lowerMessage.includes(word))) {
     return knowledgeBase.global.responses.tour;
   }
 
-  // Ajuda
   if (['ajuda', 'help', 'socorro'].some(word => lowerMessage.includes(word))) {
     return knowledgeBase.global.responses.ajuda;
   }
 
-  // Fallback
   return knowledgeBase.global.responses.fallback;
 };
 
