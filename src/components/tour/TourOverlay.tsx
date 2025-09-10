@@ -69,22 +69,48 @@ const TourOverlay: React.FC = () => {
     return null;
   }
 
-  const handleNext = () => {
+  const waitForNextStepElement = (selector: string, timeout = 7000) => {
+    return new Promise<void>((resolve) => {
+      const start = Date.now();
+      function check() {
+        const el = document.querySelector(selector);
+        if (el && (el as HTMLElement).offsetParent !== null) {
+          resolve();
+        } else if (Date.now() - start > timeout) {
+          resolve();
+        } else {
+          setTimeout(check, 50);
+        }
+      }
+      check();
+    });
+  };
+
+  const handleNext = async () => {
     if (step.action === 'click' && highlightedElement) {
       try {
         (highlightedElement as HTMLElement).click();
-        
-        setTimeout(() => {
-          nextStep();
-        }, 1000);
+        // Aguarda o elemento do próximo passo aparecer antes de avançar
+        const nextStepObj = activeTour?.steps[currentStep + 1];
+        if (nextStepObj && nextStepObj.selector) {
+          await waitForNextStepElement(nextStepObj.selector);
+        } else {
+          await new Promise(res => setTimeout(res, 700));
+        }
+        nextStep();
       } catch (error) {
         console.warn('Erro ao clicar no elemento:', error);
         nextStep();
       }
     } else if (step.action === 'navigate') {
-      setTimeout(() => {
-        nextStep();
-      }, 1500);
+      // Aguarda o elemento do próximo passo aparecer antes de avançar
+      const nextStepObj = activeTour?.steps[currentStep + 1];
+      if (nextStepObj && nextStepObj.selector) {
+        await waitForNextStepElement(nextStepObj.selector);
+      } else {
+        await new Promise(res => setTimeout(res, 1500));
+      }
+      nextStep();
     } else {
       nextStep();
     }
