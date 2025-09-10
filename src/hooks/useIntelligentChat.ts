@@ -6,6 +6,8 @@ import type { ChatMessage } from '../types';
 export interface UseIntelligentChatReturn {
   messages: ChatMessage[];
   isTyping: boolean;
+  isProcessing: boolean;
+  avatarState: 'idle' | 'thinking' | 'speaking';
   sendMessage: (message: string) => Promise<void>;
   clearChat: () => void;
   suggestions: string[];
@@ -23,11 +25,15 @@ export interface UseIntelligentChatReturn {
 export const useIntelligentChat = (): UseIntelligentChatReturn => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [needsDisambiguation, setNeedsDisambiguation] = useState(false);
   const [disambiguationOptions, setDisambiguationOptions] = useState<Array<{text: string; action: string}>>([]);
   
   const location = useLocation();
+
+  // Estado do avatar baseado no estado atual
+  const avatarState = chatProcessor.getAvatarState(isProcessing, isTyping);
 
   // Mensagem de boas-vindas inicial com comportamento específico por página
   useEffect(() => {
@@ -59,14 +65,25 @@ export const useIntelligentChat = (): UseIntelligentChatReturn => {
     };
 
     setMessages(prev => [...prev, userMsg]);
-    setIsTyping(true);
+    setIsProcessing(true);
 
-    // Simula delay de digitação realista
-    await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1200));
+    // Simula delay de processamento (300-800ms)
+    const processingDelay = 300 + Math.random() * 500;
+    await new Promise(resolve => setTimeout(resolve, processingDelay));
 
     try {
       // Processa mensagem com IA
       const result = chatProcessor.processMessage(userMessage, location.pathname);
+      
+      setIsProcessing(false);
+      
+      // Calcula delay realista para typing baseado no tamanho da resposta
+      const typingDelay = chatProcessor.calculateTypingDelay(result.response);
+      
+      setIsTyping(true);
+      
+      // Delay realista baseado no tamanho da resposta
+      await new Promise(resolve => setTimeout(resolve, typingDelay));
       
       // Cria resposta do assistente
       const assistantMsg: ChatMessage = {
@@ -134,6 +151,8 @@ export const useIntelligentChat = (): UseIntelligentChatReturn => {
   return {
     messages,
     isTyping,
+    isProcessing,
+    avatarState,
     sendMessage,
     clearChat,
     suggestions,

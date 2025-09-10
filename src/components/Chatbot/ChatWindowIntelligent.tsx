@@ -5,6 +5,7 @@ import { useTourStore } from '../../stores/tourStore';
 import { useChatStore } from '../../stores/chatStore';
 import type { UseIntelligentChatReturn } from '../../hooks/useIntelligentChat';
 import MessageBubble from './MessageBubble';
+import AnimatedAvatar from './AnimatedAvatar';
 
 interface ChatWindowProps {
   chatHook?: UseIntelligentChatReturn;
@@ -22,6 +23,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
   const {
     messages,
     isTyping,
+    isProcessing,
+    avatarState,
     sendMessage,
     clearChat,
     suggestions,
@@ -32,6 +35,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
   } = chatHook || {
     messages: [],
     isTyping: false,
+    isProcessing: false,
+    avatarState: 'idle' as const,
     sendMessage: async () => {},
     clearChat: () => {},
     suggestions: [],
@@ -79,13 +84,31 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-secondary text-white rounded-t-lg">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-            🤖
-          </div>
+          {/* Avatar Animado */}
+          <AnimatedAvatar state={avatarState} />
           <div>
             <h3 className="font-semibold">Assistente Virtual</h3>
-            <p className="text-xs opacity-75">
-              {sessionStats.currentContext} • {sessionStats.messageCount} msgs
+            <p className="text-xs opacity-75 flex items-center space-x-2">
+              <span>
+                {sessionStats.currentContext === 'clients' && 'Seção: Clientes'}
+                {sessionStats.currentContext === 'operations' && 'Seção: Operações'}  
+                {sessionStats.currentContext === 'global' && 'Página Inicial'}
+                {isProcessing && ' • Processando...'}
+              </span>
+              
+              {/* Indicador de contexto */}
+              <span className={`w-2 h-2 rounded-full ${
+                sessionStats.currentContext === 'clients' ? 'bg-green-400' :
+                sessionStats.currentContext === 'operations' ? 'bg-blue-400' :
+                'bg-gray-400'
+              }`} />
+              
+              {/* Contador de mensagens */}
+              {sessionStats.messageCount > 0 && (
+                <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                  {sessionStats.messageCount}
+                </span>
+              )}
             </p>
           </div>
         </div>
@@ -179,13 +202,13 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Digite sua pergunta..."
+            placeholder={isProcessing ? "Processando..." : isTyping ? "Assistente digitando..." : "Digite sua pergunta..."}
             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-            disabled={isTyping}
+            disabled={isTyping || isProcessing}
           />
           <button
             onClick={handleSendMessage}
-            disabled={!inputValue.trim() || isTyping}
+            disabled={!inputValue.trim() || isTyping || isProcessing}
             className="px-3 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <PaperAirplaneIcon className="h-4 w-4" />

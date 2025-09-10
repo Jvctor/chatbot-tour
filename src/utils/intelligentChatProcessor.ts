@@ -347,6 +347,30 @@ export class IntelligentChatProcessor {
   }
 
   /**
+   * ⏱️ Simula delay realista baseado no tamanho da resposta
+   */
+  public calculateTypingDelay(responseText: string): number {
+    const baseDelay = 1000; // 1 segundo base
+    const wordsPerSecond = 3; // Velocidade de "digitação"
+    const wordCount = responseText.split(' ').length;
+    
+    // Delay baseado no número de palavras + variação aleatória
+    const calculatedDelay = baseDelay + (wordCount / wordsPerSecond * 1000);
+    const randomVariation = Math.random() * 500; // ±500ms de variação
+    
+    return Math.min(calculatedDelay + randomVariation, 4000); // Máximo 4 segundos
+  }
+
+  /**
+   * 🎭 Determina estado do avatar baseado na ação
+   */
+  public getAvatarState(isProcessing: boolean, isTyping: boolean): 'idle' | 'thinking' | 'speaking' {
+    if (isProcessing) return 'thinking';
+    if (isTyping) return 'speaking';
+    return 'idle';
+  }
+
+  /**
    * 🗑️ Limpa contexto da sessão
    */
   public clearSession(): void {
