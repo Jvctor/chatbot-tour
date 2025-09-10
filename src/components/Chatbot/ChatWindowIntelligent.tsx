@@ -75,7 +75,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
   };
 
   return (
-    <div className="w-80 h-96 bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col">
+    <div className="w-85 h-102 bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col">
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-secondary text-white rounded-t-lg">
         <div className="flex items-center space-x-2">
           <AnimatedAvatar state={avatarState} />

@@ -26,7 +26,7 @@ const TourProvider: React.FC<TourProviderProps> = ({ children }) => {
   const { isActive, activeTour, startTour: startStoreTour, endTour } = useTourStore();
   const isChatOpen = useChatStore((state) => state.isOpen);
   const toggleChat = useChatStore((state) => state.toggleChat);
-  // Sempre que o tour estiver ativo, feche o chatbot se estiver aberto
+
   useEffect(() => {
     if (isActive && isChatOpen) {
       toggleChat();
