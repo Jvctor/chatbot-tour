@@ -128,9 +128,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center space-x-2 text-gray-500"
           >
-            <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
-              🤖
-            </div>
             <div className="flex space-x-1">
               <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
               <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
