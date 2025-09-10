@@ -8,9 +8,6 @@ export class IntelligentChatProcessor {
     confidence: 0
   };
 
-  /**
-   * Processa a mensagem do usuário de forma inteligente
-   */
   public processMessage(
     userMessage: string, 
     currentRoute: string = '/'
@@ -21,16 +18,12 @@ export class IntelligentChatProcessor {
     needsDisambiguation?: boolean;
     options?: Array<{text: string; action: string}>;
   } {
-    // Atualiza contexto da sessão
     this.updateSessionContext(userMessage, currentRoute);
 
-    // 1. Análise de intenção
     const intentAnalysis = this.analyzeIntent(userMessage);
     
-    // 2. Processamento contextual
     const contextualResponse = this.getContextualResponse(userMessage, intentAnalysis);
     
-    // 3. Verifica se precisa de desambiguação
     if (contextualResponse.needsDisambiguation) {
       return {
         response: contextualResponse.response,
@@ -40,7 +33,6 @@ export class IntelligentChatProcessor {
       };
     }
 
-    // 4. Gera resposta final com sugestões
     const finalResponse = this.generateResponse(userMessage, intentAnalysis);
     
     return {
@@ -50,9 +42,6 @@ export class IntelligentChatProcessor {
     };
   }
 
-  /**
-   * 🎯 Analisa a intenção da mensagem
-   */
   private analyzeIntent(message: string): {
     intent: string;
     confidence: number;
@@ -69,12 +58,10 @@ export class IntelligentChatProcessor {
       context: currentContext
     };
 
-    // Procura por padrões de intenção
     for (const pattern of knowledgeBase.intentMatching.patterns) {
       let confidence = 0;
       const matchedKeywords: string[] = [];
 
-      // Verifica match de keywords
       for (const keyword of pattern.keywords) {
         if (normalizedMessage.includes(keyword)) {
           confidence += pattern.confidence;
@@ -82,15 +69,12 @@ export class IntelligentChatProcessor {
         }
       }
 
-      // BONUS MAIOR por contexto correto da página atual
       if (pattern.context && pattern.context === currentContext) {
-        confidence += 0.3; // Aumentado de 0.2 para 0.3
+        confidence += 0.3; 
       }
 
-      // Verifica sinônimos com peso maior para contexto atual
       confidence += this.checkSynonyms(normalizedMessage, currentContext);
 
-      // BONUS para perguntas específicas da página atual
       confidence += this.checkPageSpecificQuestions(normalizedMessage, currentContext);
 
       if (confidence > bestMatch.confidence) {
@@ -106,9 +90,6 @@ export class IntelligentChatProcessor {
     return bestMatch;
   }
 
-  /**
-   * 🔄 Processa resposta contextual
-   */
   private getContextualResponse(
     message: string, 
     intentAnalysis: any
@@ -139,9 +120,7 @@ export class IntelligentChatProcessor {
     };
   }
 
-  /**
-   * 📝 Gera resposta final
-   */
+  
   private generateResponse(
     message: string, 
     intentAnalysis: any
@@ -159,11 +138,9 @@ export class IntelligentChatProcessor {
       };
     }
 
-    // Procura resposta específica
     const normalizedMessage = message.toLowerCase();
     let response = '';
 
-    // Busca por match exato primeiro
     for (const [key, value] of Object.entries(contextData.responses)) {
       if (normalizedMessage.includes(key)) {
         response = value;
@@ -171,12 +148,10 @@ export class IntelligentChatProcessor {
       }
     }
 
-    // Se não encontrou, usa lógica de similaridade
     if (!response) {
       response = this.findSimilarResponse(normalizedMessage, contextData.responses);
     }
 
-    // Fallback se ainda não encontrou
     if (!response) {
       response = this.getContextualFallback(currentContext);
     }
@@ -187,9 +162,6 @@ export class IntelligentChatProcessor {
     };
   }
 
-  /**
-   * 🔍 Busca resposta similar usando keywords
-   */
   private findSimilarResponse(message: string, responses: Record<string, string>): string {
     const words = message.split(' ');
     let bestMatch = '';
@@ -225,17 +197,12 @@ export class IntelligentChatProcessor {
     }
   }
 
-  /**
-   * 📍 Determina contexto atual baseado na rota
-   */
+  
   private getCurrentContext(): string {
     const route = this.sessionContext.currentPage;
     return knowledgeBase.contextualLogic.pageContext[route] || 'global';
   }
 
-  /**
-   * 📊 Verifica sinônimos
-   */
   private checkSynonyms(message: string, context: string): number {
     const contextData = this.getContextData(context);
     if (!contextData?.synonyms) return 0;
@@ -251,24 +218,19 @@ export class IntelligentChatProcessor {
     return Math.min(score, 0.3);
   }
 
-  /**
-   * 🎯 Verifica perguntas específicas da página atual
-   */
+
   private checkPageSpecificQuestions(message: string, context: string): number {
     const contextData = this.getContextData(context);
     if (!contextData?.responses) return 0;
 
     let score = 0;
     
-    // Verifica se a mensagem corresponde a perguntas específicas do contexto
     for (const [questionKey] of Object.entries(contextData.responses)) {
-      // Perguntas específicas têm prioridade maior
       if (questionKey.length > 5 && message.includes(questionKey)) {
-        score += 0.4; // Bonus alto para perguntas específicas
+        score += 0.4; 
       }
     }
 
-    // Bonus adicional para quickActions específicas da página
     if (contextData.quickActions) {
       for (const action of contextData.quickActions) {
         if (message.toLowerCase().includes(action.toLowerCase())) {
@@ -280,22 +242,15 @@ export class IntelligentChatProcessor {
     return Math.min(score, 0.5);
   }
 
-  /**
-   * Gera ações sugeridas baseadas no contexto
-   */
   private getSuggestedActions(context: string, intent: string): string[] {
     const contextData = this.getContextData(context);
     const baseActions = contextData?.quickActions || [];
 
-    // Adiciona ações específicas baseadas na intenção
     const intentActions = this.getIntentBasedActions(intent);
     
     return [...new Set([...baseActions, ...intentActions])];
   }
 
-  /**
-   * 🔗 Ações baseadas na intenção
-   */
   private getIntentBasedActions(intent: string): string[] {
     const actionMap: Record<string, string[]> = {
       'create_client': ['Iniciar tour de criação', 'Ver exemplo', 'Ajuda com formulário'],
@@ -319,7 +274,6 @@ export class IntelligentChatProcessor {
   private updateSessionContext(message: string, currentRoute: string): void {
     this.sessionContext.currentPage = currentRoute;
     
-    // Adiciona mensagem ao histórico
     this.sessionContext.conversationHistory.push({
       id: Date.now().toString(),
       type: 'user',
@@ -327,16 +281,12 @@ export class IntelligentChatProcessor {
       timestamp: new Date()
     });
 
-    // Mantém apenas as últimas N mensagens
     const maxHistory = knowledgeBase.sessionManagement.maxHistorySize;
     if (this.sessionContext.conversationHistory.length > maxHistory) {
       this.sessionContext.conversationHistory = this.sessionContext.conversationHistory.slice(-maxHistory);
     }
   }
 
-  /**
-   * 📈 Obtém estatísticas da sessão
-   */
   public getSessionStats() {
     return {
       currentContext: this.getCurrentContext(),
@@ -346,33 +296,25 @@ export class IntelligentChatProcessor {
     };
   }
 
-  /**
-   * ⏱️ Simula delay realista baseado no tamanho da resposta
-   */
   public calculateTypingDelay(responseText: string): number {
-    const baseDelay = 1000; // 1 segundo base
-    const wordsPerSecond = 3; // Velocidade de "digitação"
+    const baseDelay = 1000; 
+    const wordsPerSecond = 3;
     const wordCount = responseText.split(' ').length;
     
-    // Delay baseado no número de palavras + variação aleatória
     const calculatedDelay = baseDelay + (wordCount / wordsPerSecond * 1000);
-    const randomVariation = Math.random() * 500; // ±500ms de variação
+    const randomVariation = Math.random() * 500; 
     
-    return Math.min(calculatedDelay + randomVariation, 4000); // Máximo 4 segundos
+    return Math.min(calculatedDelay + randomVariation, 4000);
   }
 
-  /**
-   * 🎭 Determina estado do avatar baseado na ação
-   */
+
   public getAvatarState(isProcessing: boolean, isTyping: boolean): 'idle' | 'thinking' | 'speaking' {
     if (isProcessing) return 'thinking';
     if (isTyping) return 'speaking';
     return 'idle';
   }
 
-  /**
-   * 🗑️ Limpa contexto da sessão
-   */
+
   public clearSession(): void {
     this.sessionContext = {
       currentPage: '/',
@@ -382,5 +324,4 @@ export class IntelligentChatProcessor {
   }
 }
 
-// Singleton para usar em toda a aplicação
 export const chatProcessor = new IntelligentChatProcessor();

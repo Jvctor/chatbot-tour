@@ -29,7 +29,6 @@ const TourStep: React.FC<TourStepProps> = ({
   onSkip,
   isLastStep,
 }) => {
-  // Calcula a posição do tooltip baseado na posição preferida
   const getTooltipPosition = () => {
     const tooltipWidth = 320;
     const tooltipHeight = 250;
@@ -40,7 +39,6 @@ const TourStep: React.FC<TourStepProps> = ({
     let top = 0;
     let actualPosition = step.position;
 
-    // Calcula posição inicial baseada na preferência
     switch (step.position) {
       case 'top':
         left = elementRect.left + elementRect.width / 2 - tooltipWidth / 2;
@@ -60,11 +58,9 @@ const TourStep: React.FC<TourStepProps> = ({
         break;
     }
 
-    // Ajusta se sair da tela (com fallback para posições alternativas)
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    // Se sair da esquerda ou direita
     if (left < margin) {
       left = margin;
       if (step.position === 'left') actualPosition = 'right';
@@ -73,8 +69,6 @@ const TourStep: React.FC<TourStepProps> = ({
       left = viewportWidth - tooltipWidth - margin;
       if (step.position === 'right') actualPosition = 'left';
     }
-
-    // Se sair do topo ou bottom
     if (top < margin) {
       top = margin;
       if (step.position === 'top') actualPosition = 'bottom';
@@ -89,18 +83,6 @@ const TourStep: React.FC<TourStepProps> = ({
 
   const { left, top } = getTooltipPosition();
 
-  const getActionIcon = () => {
-    switch (step.action) {
-      case 'click':
-        return '👆';
-      case 'input':
-        return '⌨️';
-      case 'navigate':
-        return '🔍';
-      default:
-        return '👀';
-    }
-  };
 
   const getActionText = () => {
     switch (step.action) {
@@ -123,13 +105,10 @@ const TourStep: React.FC<TourStepProps> = ({
       className="absolute z-52 pointer-events-auto"
       style={{ left, top }}
     >
-      {/* Tooltip */}
       <div className="bg-white rounded-lg shadow-2xl border max-w-sm">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-t-lg text-white">
+        <div className="bg-secondary p-4 rounded-t-lg text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <span className="text-lg">{getActionIcon()}</span>
               <div>
                 <h3 className="font-semibold text-sm">{step.title}</h3>
                 <p className="text-xs opacity-90">
@@ -145,8 +124,6 @@ const TourStep: React.FC<TourStepProps> = ({
             </button>
           </div>
         </div>
-
-        {/* Content */}
         <div className="p-4">
           <div className="mb-4">
             <div className="flex items-center space-x-2 mb-2">
@@ -158,8 +135,6 @@ const TourStep: React.FC<TourStepProps> = ({
               {step.description}
             </p>
           </div>
-
-          {/* Progress Bar */}
           <div className="mb-4">
             <div className="bg-gray-200 rounded-full h-2">
               <motion.div
@@ -170,8 +145,6 @@ const TourStep: React.FC<TourStepProps> = ({
               />
             </div>
           </div>
-
-          {/* Actions */}
           <div className="flex items-center justify-between">
             <div className="flex space-x-2">
               {onPrev && (
