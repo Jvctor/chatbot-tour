@@ -17,7 +17,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
   
   const { toggleChat } = useChatStore();
 
-  // Se temos o hook inteligente, usamos ele
   const {
     messages,
     isTyping,
@@ -44,12 +43,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
     sessionStats: { currentContext: 'global', messageCount: 0, lastConfidence: 0, currentPage: '/' }
   };
 
-  // Auto-scroll para última mensagem
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Foco no input quando abre
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -79,10 +76,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
 
   return (
     <div className="w-80 h-96 bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col">
-      {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-secondary text-white rounded-t-lg">
         <div className="flex items-center space-x-2">
-          {/* Avatar Animado */}
           <AnimatedAvatar state={avatarState} />
           <div>
             <h3 className="font-semibold">Assistente Virtual</h3>
@@ -93,15 +88,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
                 {sessionStats.currentContext === 'global' && 'Página Inicial'}
                 {isProcessing && ' • Processando...'}
               </span>
-              
-              {/* Indicador de contexto */}
               <span className={`w-2 h-2 rounded-full ${
                 sessionStats.currentContext === 'clients' ? 'bg-green-400' :
                 sessionStats.currentContext === 'operations' ? 'bg-blue-400' :
                 'bg-gray-400'
               }`} />
-              
-              {/* Contador de mensagens */}
               {sessionStats.messageCount > 0 && (
                 <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
                   {sessionStats.messageCount}
@@ -127,14 +118,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
           </button>
         </div>
       </div>
-
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((message) => (
           <MessageBubble key={message.id} message={message} />
         ))}
-        
-        {/* Typing indicator */}
         {isTyping && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -154,8 +141,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
         
         <div ref={messagesEndRef} />
       </div>
-
-      {/* Disambiguation Options */}
       {needsDisambiguation && disambiguationOptions.length > 0 && (
         <div className="px-4 py-2 border-t border-gray-100">
           <p className="text-xs text-gray-600 mb-2">🤔 Escolha uma opção:</p>
@@ -172,8 +157,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
           </div>
         </div>
       )}
-
-      {/* Suggestions */}
       {suggestions.length > 0 && !needsDisambiguation && (
         <div className="px-4 py-2 border-t border-gray-100">
           <p className="text-xs text-gray-600 mb-2">💡 Sugestões:</p>
@@ -190,8 +173,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
           </div>
         </div>
       )}
-
-      {/* Input */}
       <div className="p-4 border-t border-gray-200">
         <div className="flex space-x-2">
           <input
@@ -212,8 +193,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHook }) => {
             <PaperAirplaneIcon className="h-4 w-4" />
           </button>
         </div>
-        
-        {/* Context indicator */}
         <div className="mt-2 text-xs text-gray-500 flex items-center justify-between">
           <span>
             {sessionStats.lastConfidence > 0 && (

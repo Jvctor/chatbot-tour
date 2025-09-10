@@ -42,7 +42,6 @@ const TourProvider: React.FC<TourProviderProps> = ({ children }) => {
     }
   };
 
-  // Previne scroll quando tour está ativo
   useEffect(() => {
     if (isActive) {
       document.body.style.overflow = 'hidden';
