@@ -65,7 +65,11 @@ const Clients: React.FC = () => {
           title="Lista de Clientes"
           columns={[
             { key: 'name', label: 'Cliente' },
-            { key: 'type', label: 'Tipo' },
+            {
+              key: 'type',
+              label: 'Tipo',
+              render: (_, row) => row.type === 'agriculture' ? 'Agricultura' : 'Agronegócio'
+            },
             { key: 'document', label: 'Documento' },
             { key: 'phone', label: 'Contato' },
             { 
