@@ -133,6 +133,7 @@ const CreateClient: React.FC = () => {
                 </label>
                 <input
                   type="email"
+                  data-testid='client-email-input'
                   id="email"
                   name="email"
                   value={formData.email}
@@ -150,6 +151,7 @@ const CreateClient: React.FC = () => {
                   type="tel"
                   id="phone"
                   name="phone"
+                  data-testid="client-phone-input"
                   value={formData.phone}
                   onChange={handleInputChange}
                   placeholder="(11) 99999-9999"

@@ -30,7 +30,7 @@ export const knowledgeBase: KnowledgeBase = {
   'agronegocio': 'Tipo Agronegócio é para empresas e grandes produtores do setor.',
   'como editar cliente': 'Editar Cliente:\n\n1. Vá para a lista de clientes\n2. Clique no ícone de edição\n3. Modifique os campos necessários\n4. Salve as alterações\n\nAtenção: Tipo de cliente não pode ser alterado após criação.',
     },
-    tours: ['tour-criar-cliente', 'tour-gerenciar-clientes'],
+    tours: ['tour-criar-cliente'],
     quickActions: ['Como criar um cliente?', 'Diferença entre tipos?', 'Tour completo'],
     synonyms: {
       'criar': ['novo', 'cadastrar', 'adicionar', 'registrar'],
@@ -52,7 +52,7 @@ export const knowledgeBase: KnowledgeBase = {
   'analise': 'Processo de Análise:\nApós envio → Em Análise → Você recebe atualizações por email → Decisão final',
   'acompanhar análise': 'Como Acompanhar a Análise:\n\nEmail: Notificações automáticas\nSistema: Status em tempo real\nDashboard: Visão geral das operações\nPrazo: Até 5 dias úteis\n\nVocê será notificado de qualquer mudança!'
     },
-    tours: ['tour-nova-operacao', 'tour-acompanhar-operacoes'],
+    tours: ['tour-nova-operacao'],
     quickActions: ['Como preencher formulário?', 'Status das operações', 'Tour completo'],
     synonyms: {
       'criar': ['nova', 'iniciar', 'começar', 'solicitar'],

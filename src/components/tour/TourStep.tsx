@@ -84,19 +84,6 @@ const TourStep: React.FC<TourStepProps> = ({
   const { left, top } = getTooltipPosition();
 
 
-  const getActionText = () => {
-    switch (step.action) {
-      case 'click':
-        return 'Clique aqui';
-      case 'input':
-        return 'Digite aqui';
-      case 'navigate':
-        return 'Navegue para';
-      default:
-        return 'Observe';
-    }
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -126,11 +113,6 @@ const TourStep: React.FC<TourStepProps> = ({
         </div>
         <div className="p-4">
           <div className="mb-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <span className="text-sm font-medium text-blue-600">
-                {getActionText()}
-              </span>
-            </div>
             <p className="text-gray-700 text-sm leading-relaxed">
               {step.description}
             </p>
