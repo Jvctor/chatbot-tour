@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import PageHeader from '../../components/PageHeader';
+import { maskCPF, maskCNPJ, maskPhone } from '../../utils/mask';
 import Notification from '../../components/Notification';
 
 const CreateClient: React.FC = () => {
@@ -16,9 +17,20 @@ const CreateClient: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    let maskedValue = value;
+    if (name === 'document') {
+      if (formData.type === 'agriculture') {
+        maskedValue = maskCPF(value);
+      } else {
+        maskedValue = maskCNPJ(value);
+      }
+    }
+    if (name === 'phone') {
+      maskedValue = maskPhone(value);
+    }
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: maskedValue
     }));
   };
 

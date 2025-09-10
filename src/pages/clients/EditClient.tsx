@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { mockClients } from '../../data/mockData';
 import Notification from '../../components/Notification';
+import { maskCPF, maskCNPJ, maskPhone } from '../../utils/mask';
 
 const EditClient: React.FC = () => {
   const navigate = useNavigate();
@@ -36,9 +37,20 @@ const EditClient: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    let maskedValue = value;
+    if (name === 'document') {
+      if (formData.type === 'agriculture') {
+        maskedValue = maskCPF(value);
+      } else {
+        maskedValue = maskCNPJ(value);
+      }
+    }
+    if (name === 'phone') {
+      maskedValue = maskPhone(value);
+    }
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: maskedValue
     }));
   };
 
