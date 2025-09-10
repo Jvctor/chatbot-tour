@@ -1,69 +1,111 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Chatbot Tour - Sistema de Tours Contextuais com React, TypeScript e Vite
 
-Currently, two official plugins are available:
+Este projeto implementa um sistema de tours guiados e chatbot inteligente para aplicações React, com foco em contexto de página e experiência do usuário.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Sumário
+- [Decisões Técnicas e Arquiteturais](#decisões-técnicas-e-arquiteturais)
+- [Como o sistema contextual funciona](#como-o-sistema-contextual-funciona)
+- [Como adicionar novos tours/contextos](#como-adicionar-novos-tourscontextos)
+- [Instruções para executar o projeto](#instruções-para-executar-o-projeto)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Decisões Técnicas e Arquiteturais
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
+- **Stack:** React + TypeScript + Vite + Zustand (gerenciamento de estado) + TailwindCSS.
+- **Arquitetura modular:**
+  - `src/components/chatbot/` - Componentes do chatbot e janela de chat.
+  - `src/components/tour/` - Componentes do sistema de tour guiado.
+  - `src/data/knowledgeBase.ts` - Base de conhecimento contextual e lógica de intenções.
+  - `src/data/tours.ts` - Definição dos tours e seus passos.
+  - `src/hooks/` - Hooks customizados para contexto e chat inteligente.
+  - `src/stores/` - Zustand stores para chat e tour.
+- **Lazy loading:** Tours são carregados sob demanda para otimizar performance.
+- **Contexto de página:** O sistema detecta a rota/página atual e ajusta sugestões, respostas e tours.
+- **Testabilidade:** Componentes e lógica separados para fácil manutenção e testes.
+
+## Como o sistema contextual funciona
+
+O sistema utiliza uma base de conhecimento (`knowledgeBase.ts`) e lógica de processamento de mensagens para:
+
+1. **Detectar contexto:**
+  - O hook `useContext` identifica a página atual e define o contexto (ex: `clients`, `operations`).
+  - O contexto é salvo no Zustand store e usado pelo chatbot e pelo tour.
+
+2. **Processamento de mensagens:**
+  - O `IntelligentChatProcessor` analisa a mensagem do usuário, identifica intenção, entidades e contexto.
+  - Utiliza padrões, sinônimos e pesos de contexto para sugerir ações e respostas.
+  - Se a mensagem for ambígua, sugere opções de desambiguação.
+
+3. **Sugestão de tours e ações:**
+  - O chatbot sugere tours relevantes conforme o contexto e intenção detectada.
+  - O usuário pode iniciar um tour digitando comandos ou clicando em botões.
+
+4. **Execução do tour:**
+  - O tour é definido em `src/data/tours.ts` como uma lista de passos (steps), cada um com seletor, título, descrição e ação.
+  - O componente `TourOverlay` destaca elementos na tela e orienta o usuário passo a passo.
+  - O tour pode ser iniciado via chat ou botões nas páginas.
+
+## Como adicionar novos tours/contextos
+
+### 1. Adicionar um novo tour
+
+1. Edite o arquivo `src/data/tours.ts` e adicione um novo objeto à lista `tours`:
+  ```ts
   {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+    id: 'tour-exemplo',
+    name: 'Nome do Tour',
+    description: 'Descrição do tour',
+    context: ['clients'], // ou 'operations', etc
+    steps: [
+     {
+      id: 'step-1',
+      selector: '[data-testid="elemento"]',
+      title: 'Título do passo',
+      description: 'Descrição do passo',
+      position: 'bottom',
+      action: 'click' // ou 'input', 'navigate'
+     },
+     // ...outros passos
+    ]
+  }
+  ```
+2. Adicione botões ou comandos para iniciar o tour, se desejar, nas páginas ou no chatbot.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 2. Adicionar novo contexto ou respostas
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. Edite `src/data/knowledgeBase.ts`:
+  - Adicione um novo bloco em `knowledgeBase` para o contexto desejado (ex: `clients`, `operations`).
+  - Defina `keywords`, `responses`, `tours` e `quickActions`.
+  - Adicione sinônimos e padrões de intenção se necessário.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Para lógica de desambiguação, edite `contextualLogic.ambiguousKeywords`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Instruções para executar o projeto
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. **Pré-requisitos:**
+  - Node.js 18+
+  - npm 9+
+
+2. **Instale as dependências:**
+  ```sh
+  npm install
+  ```
+
+3. **Execute o projeto em modo desenvolvimento:**
+  ```sh
+  npm run dev
+  ```
+  O app estará disponível em `http://localhost:5173`.
+
+4. **Build para produção:**
+  ```sh
+  npm run build
+  ```
+
+5. **Outros comandos úteis:**
+  - `npm run lint` — Lint do código
+  - `npm run preview` — Preview do build
+
+---
