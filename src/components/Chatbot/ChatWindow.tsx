@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { PaperAirplaneIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PaperAirplaneIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useTourStore } from '../../stores/tourStore';
 import { useChatStore } from '../../stores/chatStore';
 import type { ChatMessage } from '../../types'; 
@@ -30,7 +30,8 @@ const ChatWindow: React.FC = () => {
     currentContext, 
     addMessage, 
     setTyping,
-    clearMessages 
+    clearMessages,
+    toggleChat 
   } = useChatStore();
   
   const { startTour } = useTourStore();
@@ -185,13 +186,23 @@ const ChatWindow: React.FC = () => {
             </div>
           </div>
           
-          <button
-            onClick={clearMessages}
-            className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
-            title="Limpar histórico"
-          >
-            <TrashIcon className="w-4 h-4" />
-          </button>
+          <div className="flex items-center space-x-1">
+            <button
+              onClick={clearMessages}
+              className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+              title="Limpar histórico"
+            >
+              <TrashIcon className="w-4 h-4" />
+            </button>
+            
+            <button
+              onClick={toggleChat}
+              className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+              title="Fechar chat"
+            >
+              <XMarkIcon className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 

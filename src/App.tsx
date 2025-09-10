@@ -22,8 +22,6 @@ function App() {
           <Route path="/operations" element={<Operacoes />} />
           <Route path="/operations/create" element={<CreateOperation />} />
           <Route path="/dashboard" />
-          {/*  />
-          <Route path="/parceiros" element={<Parceiros />} /> */}
         </Routes>
       </Layout>
       <ChatWidget />
